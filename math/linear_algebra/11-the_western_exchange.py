@@ -8,3 +8,4 @@ def np_transpose(matrix):
         the transposed matrix
     """
     return matrix.T
+# peut s'ecrire aussi return matrix.transpose()
