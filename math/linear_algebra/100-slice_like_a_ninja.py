@@ -11,9 +11,8 @@ def np_slice(matrix, axes=None):
     """
     import numpy as np
 
-    
     list_slice = [slice(None)] * matrix.ndim
 
-    for axis , values in axes.items():
+    for axis, values in axes.items():
         list_slice[axis] = slice(*values)
     return matrix[tuple(list_slice)]
