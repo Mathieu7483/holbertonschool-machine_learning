@@ -9,14 +9,21 @@ def add_matrices(mat1, mat2):
         mat2: second matrix
     Returns:
         the sum of the two matrices
+        or None if the two matrices cannot be added
     """
-    if not mat1 or not mat2:
+    if isinstance(mat1, list) and isinstance(mat2, list):
+        if len(mat1) != len(mat2):
+            return None
+        result = []
+        for i in range(len(mat1)):
+            sum_values = add_matrices(mat1[i], mat2[i])
+            if sum_values is None:
+                return None
+            result.append(sum_values)
+        return result
+    
+    try:
+        return mat1 + mat2
+    except TypeError:
         return None
-
-    if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
-        return None
-
-    result = [[mat1[i][j] + mat2[i][j]
-               for j in range(len(mat1[0]))] for i in range(len(mat1))]
-
-    return result
+     
