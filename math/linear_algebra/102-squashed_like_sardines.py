@@ -17,7 +17,8 @@ def get_shape(matrix):
 
 def cat_matrices(mat1, mat2, axis=0):
     """
-    concatenate two matrices along a specific axis without using external libraries.
+    concatenate two matrices along a specific axis without
+    using external libraries.
     """
     shape1 = get_shape(mat1)
     shape2 = get_shape(mat2)
@@ -54,4 +55,3 @@ def cat_matrices(mat1, mat2, axis=0):
         # Secure against cases where m1 or m2 are
         # not lists or have different structures
         return None
- 
