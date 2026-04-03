@@ -2,46 +2,70 @@
 <img src="https://github.com/Mathieu7483/Aiko78-Photgraphy/blob/main/img/Machine%20Learning.png"\>
 </p>
 
-# Linear Algebra
+# Linear Algebra with NumPy
 
 ## 🔢 Description
 
-Ce projet est une introduction pratique à l'algèbre linéaire appliquée à l'informatique. L'objectif est de maîtriser la manipulation de vecteurs et de matrices en utilisant **Python 3** et la bibliothèque **NumPy**. Ce module couvre les opérations fondamentales (addition, multiplication, produit scalaire) ainsi que des concepts avancées comme le **Broadcasting** et la manipulation d'axes, essentiels pour le traitement de données à grande échelle.
+Ce projet explore les fondations mathématiques de l'intelligence artificielle à travers l'algèbre linéaire. L'objectif est d'abandonner les boucles `for` classiques au profit de la **vectorisation** avec **NumPy**. Nous couvrons tout, du simple découpage de vecteurs aux opérations complexes de broadcasting sur des matrices multidimensionnelles.
 
 ## 🎓 Objectifs d'apprentissage
 
-À la fin de ce projet, je suis capable d'expliquer :
+  * Maîtriser le **Slicing** (découpage) de matrices de n-dimensions.
+  * Comprendre la **Shape** (forme) et les **Axes** des arrays NumPy.
+  * Manipuler les matrices : Transposée, Concaténation, et Redimensionnement.
+  * Implémenter le **Produit Scalaire** (Dot Product) et la **Multiplication Matricielle**.
+  * Appliquer le **Broadcasting** pour optimiser les calculs.
 
-  * **Concepts fondamentaux** : Définition d'un vecteur, d'une matrice et de la transposée.
-  * **Structure de données** : Compréhension de la forme (*shape*), des axes et du découpage (*slicing*).
-  * **Opérations** : Opérations élément par élément (*element-wise*), concaténation et produit matriciel.
-  * **Performance** : Pourquoi la parallélisation est cruciale et comment NumPy l'optimise.
-  * **Broadcasting** : Comment NumPy gère des tableaux de formes différentes lors d'opérations arithmétiques.
+## 📂 Liste des Tâches (Foundations)
 
-## 🛠️ Configuration et Contraintes
-
-  * **OS** : Ubuntu 20.04 LTS.
-  * **Langage** : Python 3.9.
-  * **Bibliothèque** : NumPy 1.25.2.
-  * **Style de code** : Respect strict de `pycodestyle` (version 2.11.1).
-  * **Documentation** : Tous les modules, classes et fonctions doivent être documentés.
-  * **Exécutables** : Tous les fichiers Python doivent être exécutables (`chmod +x`).
-
-## 📂 Structure du Projet
-
-| Concept | Description | Fonctions Clés |
+| \# | Tâche | Description |
 | :--- | :--- | :--- |
-| **Slicing** | Extraction de sous-parties de matrices. | `array[start:end]` |
-| **Transpose** | Inversion des lignes et des colonnes. | `numpy.transpose()` |
-| **Broadcasting** | Opérations sur des tableaux de dimensions différentes. | Auto-expansion NumPy |
-| **Dot Product** | Calcul du produit scalaire entre deux vecteurs. | `numpy.dot()` |
-| **MatMul** | Multiplication de deux matrices. | `numpy.matmul()` |
+| **0** | [0-slice_me_up.py](./0-slice_me_up.py) | Extraction de sous-parties spécifiques d'une matrice. |
+| **1** | [1-trim_me_down.py](./1-trim_me_down.py) | Réduction de dimensions par slicing. |
+| **2** | [2-size_me_please.py](./2-size_me_please.py) | Récupération de la forme (`shape`) d'une matrice. |
+| **3** | [3-flip_me_over.py](./3-flip_me_over.py) | Inversion des axes (Transposée). |
+| **4** | [4-line_up.py](./4-line_up.py) | Addition et soustraction de matrices. |
+| **5** | [5-across_the_planes.py](./5-across_the_planes.py) | Somme sur des axes spécifiques. |
+| **6** | [6-howdy_partner.py](./6-howdy_partner.py) | Multiplication élément par élément (*element-wise*). |
+| **7** | [7-gettin_cozy.py](./7-gettin_cozy.py) | Concaténation de matrices sur différents axes. |
+| **8** | [8-ridin_bareback.py](./8-ridin_bareback.py) | Multiplication matricielle standard. |
+| **9** | [9-let_the_butcher_slice_it.py](./9-let_the_butcher_slice_it.py) | Slicing avancé sur plusieurs dimensions. |
+| **10** | [10-ill_use_my_scale.py](./10-ill_use_my_scale.py) | Multiplication d'une matrice par un scalaire. |
+| **11** | [11-the_western_exchange.py](./11-the_western_exchange.py) | Échange de lignes ou de colonnes. |
+| **12** | [12-bracin_the_elements.py](./12-bracin_the_elements.py) | Opérations logiques et masquage d'éléments. |
+| **13** | [13-cats_got_your_tongue.py](./13-cats_got_your_tongue.py) | Empilement de matrices (Stacking). |
+| **14** | [14-saddle_up.py](./14-saddle_up.py) | Redimensionnement et mise en forme (`reshape`). |
 
+-----
+
+### 🚀 Advanced Tasks (Expert Mode)
+
+> **Note :** Ces tâches poussent l'utilisation de NumPy dans ses retranchements, en se concentrant sur l'optimisation maximale sans aucune boucle Python.
+
+| \# | Tâche | Description |
+| :--- | :--- | :--- |
+| **15** | [15-Slice Like A Ninja** ](en cours) | Découpage multidimensionnel complexe et non-linéaire. |
+| **16** | [16. The Whole Barn](en cours) | Opérations globales sur des tenseurs de rang élevé. |
+| **17** | [17. Squashed Like Sardines](en cours) | Techniques de compression de dimensions et manipulation de la mémoire des arrays. |
+
+
+-----
+
+## 🛠️ Requirements
+
+  * **Python** : 3.9
+  * **NumPy** : 1.25.2
+  * **Style** : `pycodestyle` 2.11.1
+  * **Documentation** : Obligatoire pour chaque module, classe et fonction.
+
+-----
 ## ✒️ Auteur
 
 **Mathieu**
 
-[Mathieu GODALIER](https://github.com/Mathieu7483) - Élève en programmation à la Holberton School
+[Mathieu GODALIER](https://github.com/Mathieu7483) - Élève en programmation Machine Learning à la Holberton School
+
+-----
 
 ## 🙏 Remerciements
 
