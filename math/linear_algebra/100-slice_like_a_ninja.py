@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """function that slices a matrix along specified axes"""
 
-import numpy as np
-
 
 def slice_matrix(matrix, axes=None):
     """
