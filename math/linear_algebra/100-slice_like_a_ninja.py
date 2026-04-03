@@ -4,7 +4,7 @@
 import numpy as np
 
 
-def np_slice(matrix, axes={}):
+def np_slice(matrix, axes=None):
     """function that slices a matrix along specified axes
     Args:
         matrix: the numpy.ndarray to slice
@@ -14,6 +14,8 @@ def np_slice(matrix, axes={}):
     Returns:
         the sliced numpy.ndarray
     """
+    if axes is None:
+        axes = {}
     if not isinstance(matrix, np.ndarray):
         raise TypeError("matrix must be a numpy.ndarray")
     if not isinstance(axes, dict):
