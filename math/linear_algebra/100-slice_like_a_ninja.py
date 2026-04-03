@@ -9,14 +9,11 @@ def np_slice(matrix, axes=None):
         axes: dict of the form {axis: (start, stop, step)}
     Returns:        sliced numpy.ndarray along the specified axes
     """
-    if axes is None:
-        axes = {}
-    
-    r_start, r_stop, r_step = axes.get(0, (None, None, None))
-    c_start, c_stop, c_step = axes.get(1, (None, None, None))
+    import numpy as np
 
-    sub_matrix = matrix[slice(r_start, r_stop, r_step)]
     
-    result = [ligne[slice(c_start, c_stop, c_step)] for ligne in sub_matrix]
-    
-    return result
+    list_slice = [slice(None)] * matrix.ndim
+
+    for axis , values in axes.items():
+        list_slice[axis] = slice(*values)
+    return matrix[tuple(list_slice)]
