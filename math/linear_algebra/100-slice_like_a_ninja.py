@@ -2,7 +2,7 @@
 """function that slices a matrix along specified axes"""
 
 
-def slice_matrix(matrix, axes=None):
+def np_slice(matrix, axes=None):
     """
     Args:
         matrix: numpy.ndarray of any shape
