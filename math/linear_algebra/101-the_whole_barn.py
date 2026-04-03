@@ -21,9 +21,8 @@ def add_matrices(mat1, mat2):
                 return None
             result.append(sum_values)
         return result
-    
+
     try:
         return mat1 + mat2
     except TypeError:
         return None
-     
