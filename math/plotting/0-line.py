@@ -3,24 +3,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def line():
-    # 1. Préparation des données
+    # Définition explicite de X et Y
     x = np.arange(0, 11)
     y = x ** 3
 
-    # 2. Initialisation de la figure (DOIT être en premier)
+    # Initialisation de la figure
     plt.figure(figsize=(6.4, 4.8))
 
-    # 3. Tracé avec X et Y explicites + Couleur rouge
+    # Tracer AVEC x et y explicitement, en rouge ('r')
+    # L'argument '-' assure que c'est une ligne continue
     plt.plot(x, y, 'r-')
 
-    # 4. Configuration des axes (L'ordre xlabel/ylabel/title importe peu ici)
+    # Labels et Titre (Vérifie bien qu'il n'y a pas d'espace en trop)
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('y = x^3')
 
-    # 5. Définition des limites (Utilise x[0] et x[-1] pour être exact)
+    # Limites strictes
     plt.xlim(0, 10)
     plt.ylim(0, 1000)
 
-    # 6. Affichage
+    # Affichage
     plt.show()
