@@ -67,7 +67,7 @@ def all_in_one():
     ax4.set_title('Exponential Decay of Radioactive Elements')
     ax4.set_xlim(0, 20000)
     ax4.set_ylim(0, 1)
-    ax4.legend(loc='upper right', fontsize='x-small')
+    ax4.legend(loc='upper right')
     ax4.set_xticks(range(0, 20001, 5000))
     ax4.set_yticks([0.0, 0.5, 1.0])
 
