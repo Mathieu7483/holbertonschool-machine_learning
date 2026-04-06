@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def line():
 
     y = np.arange(0, 11) ** 3
@@ -14,4 +15,4 @@ def line():
     plt.xlim(0, 10)
     plt.ylim(0, 1000)
     plt.grid()
-    plt.show()  
+    plt.show()
