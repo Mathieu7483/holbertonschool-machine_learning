@@ -11,11 +11,11 @@ def bars():
     plt.figure(figsize=(6.4, 4.8))
 
     names = ['Farrah', 'Fred', 'Felicia']
-    fruits = ['apples', 'bananas', 'peaches', 'oranges']
-    colors = ['red', 'yellow', '#ffe5b4', '#ff8000']
+    fruits = ['apples', 'bananas', 'oranges', 'peaches' ]
+    colors = ['red', 'yellow', '#ff8000', '#ffe5b4']
 
     indices = np.arange(len(names))
-
+    width = 0.5
     bottom = np.zeros(len(names))
 
     for i in range(len(fruits)):
