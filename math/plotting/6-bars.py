@@ -8,7 +8,7 @@ def bars():
     """Plots a stacked bar chart of fruit quantities for three people."""
     np.random.seed(5)
     fruit = np.random.randint(0, 20, (4, 3))
-    
+
     plt.figure(figsize=(6.4, 4.8))
 
     names = ['Farrah', 'Fred', 'Felicia']
@@ -20,7 +20,7 @@ def bars():
     bottom = np.zeros(len(names))
 
     for i in range(len(fruits)):
-        plt.bar(indices, fruit[i], width=width, bottom=bottom, 
+        plt.bar(indices, fruit[i], width=width, bottom=bottom,
                 color=colors[i], label=fruits[i])
         bottom += fruit[i]
 
@@ -30,6 +30,6 @@ def bars():
     plt.xticks(indices, names)
     plt.yticks(np.arange(0, 81, 10))
     plt.ylim(0, 80)
-    
+
     plt.legend()
     plt.show()
