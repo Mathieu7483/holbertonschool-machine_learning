@@ -3,25 +3,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def line():
-    """
-    Plots y = x^3 as a red line
-    """
+    # 1. Préparation des données
     x = np.arange(0, 11)
     y = x ** 3
 
-    # On définit la figure AVANT le plot
+    # 2. Initialisation de la figure (DOIT être en premier)
     plt.figure(figsize=(6.4, 4.8))
 
-    # On passe explicitement x et y, avec le formatage 'r-'
+    # 3. Tracé avec X et Y explicites + Couleur rouge
     plt.plot(x, y, 'r-')
 
-    # Configuration des labels et limites
+    # 4. Configuration des axes (L'ordre xlabel/ylabel/title importe peu ici)
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('y = x^3')
-    
-    # On s'assure que les limites sont bien des entiers ou flottants exacts
+
+    # 5. Définition des limites (Utilise x[0] et x[-1] pour être exact)
     plt.xlim(0, 10)
     plt.ylim(0, 1000)
 
+    # 6. Affichage
     plt.show()
