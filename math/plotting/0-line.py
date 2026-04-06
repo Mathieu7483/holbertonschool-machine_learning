@@ -13,5 +13,5 @@ def line():
     plt.ylabel('y')
     plt.title('y = x^3')
     plt.xlim(0, 10)
-    plt.ylim(0, 10)
+    plt.ylim(0, 1000)
     plt.show()
