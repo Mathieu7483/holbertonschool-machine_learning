@@ -62,7 +62,7 @@ def all_in_one():
     ax4.plot(x3, y32, 'g-', label='Ra-226')
     ax4.set_xlabel('Time (years)', fontsize='x-small')
     ax4.set_ylabel('Fraction Remaining', fontsize='x-small')
-    ax4.set_title('Exponential Decay of Radioactive Elements', fontsize='x-small')
+    ax4.set_title('Exponential Decay of Radioactive Elements')
     ax4.set_xlim(0, 20000)
     ax4.set_ylim(0, 1)
     ax4.legend(loc='upper right', fontsize='x-small')
