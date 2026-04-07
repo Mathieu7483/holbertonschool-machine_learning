@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""functoion that calculates the integral of a polynomial"""
+"""function that calculates the integral of a polynomial"""
 
 
 def poly_integral(poly, C=0):
