@@ -15,5 +15,5 @@ def gradient():
     plt.colorbar(label= 'elevation (m)')
     plt.xlabel('x coordinate (m)')
     plt.ylabel('y coordinate (m)')
-    plt.title('mountain elevation')
+    plt.title('Mountain Elevation')
     plt.show()
