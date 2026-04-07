@@ -11,6 +11,6 @@ def poly_derivative(poly):
         return None
     if not all(isinstance(coef, int) for coef in poly):
         return None
-    if poly [1:] == [0]:
+    if poly [1:] == 0:
         return [0]
     return [coef * i for i, coef in enumerate(poly)][1:]
