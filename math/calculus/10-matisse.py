@@ -7,10 +7,8 @@ def poly_derivative(poly):
     poly is a list of coefficients representing the polynomial
     Returns a new list of coefficients representing the derivative
     """
-    if not isinstance(poly, list):
-        return None
-    if not all(isinstance(coef, int) for coef in poly):
+    if not isinstance(poly, list) or len(poly) == 0:
         return None
     if len(poly) == 1:
         return [0]
-    return [coef * i for i, coef in enumerate(poly)][1:]
+    return [i * poly[i] for i in range(1, len(poly))]
