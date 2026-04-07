@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+"""function that plots a 3D gradient"""
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def gradient():
+    """plots a 3D gradient"""
 
     np.random.seed(5)
 
@@ -12,7 +15,7 @@ def gradient():
     plt.figure(figsize=(6.4, 4.8))
 
     plt.scatter(x, y, c=z, cmap='viridis')
-    plt.colorbar(label= 'elevation (m)')
+    plt.colorbar(label='elevation (m)')
     plt.xlabel('x coordinate (m)')
     plt.ylabel('y coordinate (m)')
     plt.title('Mountain Elevation')
