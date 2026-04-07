@@ -16,8 +16,14 @@ def poly_integral(poly, C=0):
         return None
     if not isinstance(C, (int, float)):
         return None
+    if not all(isinstance(coef, (int, float)) for coef in poly):
+        return None
 
     integral = [C]
-    for i in range(len(poly)):
-        integral.append(poly[i] / (i + 1))
+    for i, coef in enumerate(poly):
+        val = coef / (i + 1)
+        if val.is_integer():
+            val = int(val)
+        integral.append(val)
+
     return integral
