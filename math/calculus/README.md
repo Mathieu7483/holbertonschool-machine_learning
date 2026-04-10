@@ -1,4 +1,8 @@
 # Calculus for Machine Learning
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/math/calculus/a-minimalist-geometric-composition-centered-around.png"\>
+</p>
+
 
 ## 📈 Description
 
