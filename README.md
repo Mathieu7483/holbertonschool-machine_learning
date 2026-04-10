@@ -3,3 +3,8 @@
 </p>
 
 # Holberton - Machine Learning
+
+
+## ✍️ Author
+
+  * **Mathieu** - *Programming student, specialization Machine Learning* - [👤 My Github profile](https://github.com/Mathieu7483)
