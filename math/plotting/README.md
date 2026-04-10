@@ -1,4 +1,8 @@
 # Plotting with Matplotlib
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/math/plotting/an-abstract-composition-where-structured-arrays-of.png"\>
+</p>
+
 
 ## 📊 Description
 
