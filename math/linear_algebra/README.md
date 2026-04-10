@@ -59,11 +59,9 @@ Ce projet explore les fondations mathématiques de l'intelligence artificielle �
   * **Documentation** : Obligatoire pour chaque module, classe et fonction.
 
 -----
-## ✒️ Auteur
+## ✍️ Author
 
-**Mathieu**
-
-[Mathieu GODALIER](https://github.com/Mathieu7483) - Élève en programmation Machine Learning à la Holberton School
+  * **Mathieu** - *Programming student, specialization Machine Learning* - [👤 My Github profile](https://github.com/Mathieu7483)
 
 -----
 
