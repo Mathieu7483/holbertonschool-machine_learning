@@ -116,9 +116,9 @@ class Node:
 
     def pred(self, x):
         """Returns the prediction of the node for a single input x"""
-        if x[self.feature]>self.threshold:
+        if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
-        else :
+        else:
             return self.right_child.pred(x)
 
 
@@ -150,7 +150,7 @@ class Leaf(Node):
         """String representation of a leaf"""
         return f"-> leaf [value={self.value}]"
 
-    def pred(self,x) :
+    def pred(self, x):
         """"Returns the value of the leaf for any input x"""
         return self.value
 
@@ -198,11 +198,12 @@ class Decision_Tree():
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
-        self.predict = lambda A: np.array(
-            [next(leaf.value for leaf in leaves
-          if leaf.indicator(x.reshape(1, -1))[0])
-     for x in A])
-        
-    def pred(self,x):
+        self.predict = lambda A: np.array([
+            next(leaf.value for leaf in leaves
+                 if leaf.indicator(x.reshape(1, -1))[0])
+            for x in A
+        ])
+
+    def pred(self, x):
         """Returns the prediction of the tree for a single input x"""
         return self.root.pred(x)
