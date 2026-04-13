@@ -95,6 +95,7 @@ class Node:
         return out
 
     def left_child_add_prefix(self, text):
+        """Adds a prefix to the left child for visualization purposes"""
         lines = text.split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
@@ -103,6 +104,7 @@ class Node:
         return new_text
 
     def right_child_add_prefix(self, text):
+        """Adds a prefix to the right child for visualization purposes"""
         lines = text.split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
@@ -121,21 +123,30 @@ class Leaf(Node):
         self.depth = depth
 
     def max_depth_below(self):
+        """Returns the maximum depth of the tree
+        below the leaf (which is just the depth of the leaf)"""
         return self.depth
 
     def count_nodes_below(self, only_leaves=False):
+        """Returns the number of nodes/leaves below the leaf
+        (which is just 1 if only_leaves is True, and 0 otherwise)"""
         return 1
 
     def get_leaves_below(self):
+        """Returns a list of all the leaves below the leaf
+        (which is just a list containing the leaf itself)"""
         return [self]
 
     def update_bounds_below(self):
+        """Leaves do not have bounds"""
         pass
 
     def pred(self, x):
+        """Returns the prediction of the leaf for a single input x"""
         return self.value
 
     def __str__(self):
+        """Visual representation of the leaf"""
         return f"-> leaf [value={self.value}]\n"
 
 
@@ -154,21 +165,28 @@ class Decision_Tree():
         self.predict = None
 
     def depth(self):
+        """Returns the depth of the tree"""
         return self.root.max_depth_below()
 
     def count_nodes(self, only_leaves=False):
+        """Returns the number of nodes/leaves in the tree"""
         return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def update_bounds(self):
+        """Updates the bounds of all the nodes in the tree"""
         self.root.update_bounds_below()
 
     def update_predict(self):
+        """Updates the predict function of the tree
+        based on the current structure of the tree"""
         self.update_bounds()
         leaves = self.root.get_leaves_below()
         for leaf in leaves:
             leaf.update_indicator()
 
         def predict_all(A):
+            """Predicts the class for each input in A
+            by checking which leaf's indicator function is satisfied"""
             results = np.empty(A.shape[0], dtype=int)
             for leaf in leaves:
                 results[leaf.indicator(A)] = leaf.value
@@ -176,13 +194,16 @@ class Decision_Tree():
         self.predict = predict_all
 
     def accuracy(self, test_explanatory, test_target):
+        """Returns the accuracy of the tree on the given test dataset"""
         return np.sum(np.equal(self.predict(test_explanatory),
                                test_target)) / test_target.size
 
     def np_extrema(self, arr):
+        """Returns the minimum and maximum of a numpy array"""
         return np.min(arr), np.max(arr)
 
     def random_split_criterion(self, node):
+        """Randomly selects a feature and a threshold for splitting the node"""
         diff = 0
         while diff == 0:
             feature = self.rng.integers(0, self.explanatory.shape[1])
@@ -264,4 +285,5 @@ class Decision_Tree():
             )
 
     def __str__(self):
+        """Visual representation of the tree"""
         return str(self.root)
