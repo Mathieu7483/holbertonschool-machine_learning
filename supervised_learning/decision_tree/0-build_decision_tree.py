@@ -56,4 +56,5 @@ class Decision_Tree():
         self.predict = None
 
     def depth(self):
+        """Method that returns the maximum depth of the tree"""
         return self.root.max_depth_below()
