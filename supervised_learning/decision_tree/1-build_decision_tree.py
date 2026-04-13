@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""0. Build a decision tree"""
+"""1. Build a decision tree"""
 
 import numpy as np
 
@@ -25,6 +25,24 @@ class Node:
             return max(self.left_child.max_depth_below(),
                        self.right_child.max_depth_below())
 
+    def count_nodes_below(self, only_leaves=False):
+        """Method that returns the number of nodes below the node"""
+        if self.is_leaf:
+            return 1
+
+        count = 0 if only_leaves else 1
+
+        if self.left_child:
+            count += self.left_child.count_nodes_below(
+                only_leaves=only_leaves
+                )
+        if self.right_child:
+            count += self.right_child.count_nodes_below(
+                only_leaves=only_leaves
+                )
+
+        return count
+
 
 class Leaf(Node):
     """Class Leaf that represents a leaf in a decision tree"""
@@ -37,6 +55,10 @@ class Leaf(Node):
     def max_depth_below(self):
         """Method that returns the maximum depth of the tree below the leaf"""
         return self.depth
+
+    def count_nodes_below(self, only_leaves=False):
+        """Method that returns the number of nodes below the node"""
+        return 1
 
 
 class Decision_Tree():
@@ -62,7 +84,3 @@ class Decision_Tree():
     def count_nodes(self, only_leaves=False):
         """Method that returns the number of nodes in the tree"""
         return self.root.count_nodes_below(only_leaves=only_leaves)
-
-    def count_nodes_below(self, only_leaves=False):
-        """Method that returns the number of nodes below the node"""
-        return 1
