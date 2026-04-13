@@ -3,8 +3,6 @@
 # Ignorer les fichiers main.c spécifiquement
 *main.c
 # Ignorer les fichiers de sortie générés par GCC
-*main_1.c
-*main_2.c
 *.exe
 # Ignorer les fichiers de sauvegarde de l'éditeur
 *~
@@ -15,6 +13,8 @@
 *.out
 # Ignorer les fichiers main.c spécifiquement
 *main.py
+7-main_1.py
+7-main_2.py
 # Ignorer les generations de cache
 __pycache__
 # ignorer les fichiers compilés Python
