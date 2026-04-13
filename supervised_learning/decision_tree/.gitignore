@@ -3,6 +3,8 @@
 # Ignorer les fichiers main.c spécifiquement
 *main.c
 # Ignorer les fichiers de sortie générés par GCC
+*main_1.c
+*main_2.c
 *.exe
 # Ignorer les fichiers de sauvegarde de l'éditeur
 *~
