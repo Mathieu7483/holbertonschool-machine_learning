@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""1. Build a decision tree"""
+"""2. Build a decision tree"""
 
 import numpy as np
 
@@ -27,25 +27,33 @@ class Node:
 
     def count_nodes_below(self, only_leaves=False):
         """Method that returns the number of nodes below the node"""
-        if self.is_leaf:
-            return 1
         count = 0 if only_leaves else 1
         if self.left_child:
-            count += self.left_child.count_nodes_below(
-                only_leaves=only_leaves
-                )
+            count += self.left_child.count_nodes_below(only_leaves)
         if self.right_child:
-            count += self.right_child.count_nodes_below(
-                only_leaves=only_leaves
-                )
+            count += self.right_child.count_nodes_below(only_leaves)
         return count
+
+    def __str__(self):
+        """Visual representation of the node and its children"""
+        if self.is_root:
+            out = f"root [feature={self.feature}, threshold={self.threshold}]\n"
+        else:
+            out = f"-> node [feature={self.feature}, threshold={self.threshold}]\n"
+
+        if self.left_child:
+            out += self.left_child_add_prefix(str(self.left_child))
+        if self.right_child:
+            out += self.right_child_add_prefix(str(self.right_child))
+        return out
 
     def left_child_add_prefix(self, text):
         """Method that adds a prefix to the left child of the node"""
         lines = text.split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("    |  " + x) + "\n"
+            if x:
+                new_text += ("    |  " + x) + "\n"
         return new_text
 
     def right_child_add_prefix(self, text):
@@ -53,7 +61,8 @@ class Node:
         lines = text.split("\n")
         new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("    |  " + x) + "\n"
+            if x:
+                new_text += ("       " + x) + "\n"
         return new_text
 
 
@@ -70,11 +79,12 @@ class Leaf(Node):
         return self.depth
 
     def count_nodes_below(self, only_leaves=False):
-        """Method that returns the number of nodes below the node"""
+        """A leaf always counts as 1"""
         return 1
 
     def __str__(self):
-        return (f"-> leaf [value={self.value}]")
+        """String representation of a leaf"""
+        return f"-> leaf [value={self.value}]"
 
 
 class Decision_Tree():
@@ -102,4 +112,5 @@ class Decision_Tree():
         return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def __str__(self):
+        """Returns the string representation of the root node"""
         return self.root.__str__()
