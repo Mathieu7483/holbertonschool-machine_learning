@@ -237,21 +237,39 @@ class Decision_Tree():
             node.right_child = self.get_node_child(node, right_population)
             self.fit_node(node.right_child)
 
-
     def get_leaf_child(self, node, sub_population):
-        value = np.bincount(self.target[sub_population]).argmax()
+        value = np.bincount(
+        self.target[node.sub_population[sub_population]]
+    ).argmax()
         leaf_child = Leaf(value)
-        leaf_child.depth = node.depth+1
-        leaf_child.sub_population = sub_population
+        leaf_child.depth = node.depth + 1
+        leaf_child.sub_population = node.sub_population[sub_population]
         return leaf_child
-
 
     def get_node_child(self, node, sub_population):
         n = Node()
-        n.depth = node.depth+1
-        n.sub_population = sub_population
+        n.depth = node.depth + 1
+        n.sub_population = node.sub_population[sub_population]
         return n
-
 
     def accuracy(self, test_explanatory, test_target):
         return np.sum(np.equal(self.predict(test_explanatory), test_target))/test_target.size
+
+    def fit(self, explanatory, target, verbose=0):
+        if self.split_criterion == "random":
+            self.split_criterion = self.random_split_criterion
+        else:
+            self.split_criterion = self.Gini_split_criterion
+
+        self.explanatory = explanatory
+        self.target = target
+        self.root.sub_population = np.arange(self.target.shape[0])
+        self.fit_node(self.root)
+        self.update_predict()
+
+        if verbose == 1:
+            print(f"""  Training finished.
+    - Depth                     : {self.depth()}
+    - Number of nodes           : {self.count_nodes()}
+    - Number of leaves          : {self.count_nodes(only_leaves=True)}
+    - Accuracy on training data : {self.accuracy(self.explanatory, self.target)}""")
