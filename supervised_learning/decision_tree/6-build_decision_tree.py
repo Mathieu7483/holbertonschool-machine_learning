@@ -114,8 +114,8 @@ class Node:
                                                     is_small_enough(x)]),
                                           axis=0)
 
-    def pred(self,x) :
-        if x[self.feature]>self.threshold :
+    def pred(self, x):
+        if x[self.feature]>self.threshold:
             return self.left_child.pred(x)
         else :
             return self.right_child.pred(x)
@@ -195,8 +195,9 @@ class Decision_Tree():
         for leaf in leaves:
             leaf.update_indicator()
         self.predict = lambda A: np.array(
-            [leaf.value for leaf in leaves
-             if leaf.indicator(A.reshape(1, -1))[0]][0])
+            [next(leaf.value for leaf in leaves
+          if leaf.indicator(x.reshape(1, -1))[0])
+     for x in A])
         
     def pred(self,x) :
         return self.root.pred(x)
