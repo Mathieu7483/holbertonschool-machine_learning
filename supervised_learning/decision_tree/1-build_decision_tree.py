@@ -59,12 +59,10 @@ class Decision_Tree():
         """Method that returns the maximum depth of the tree"""
         return self.root.max_depth_below()
 
+    def count_nodes(self, only_leaves=False):
+        """Method that returns the number of nodes in the tree"""
+        return self.root.count_nodes_below(only_leaves=only_leaves)
 
-def count_nodes(self, only_leaves=False):
-    """Method that returns the number of nodes in the tree"""
-    return self.root.count_nodes_below(only_leaves=only_leaves)
-
-
-def count_nodes_below(self, only_leaves=False):
-    """Method that returns the number of nodes in the tree below the node"""
-    return 1
+    def count_nodes_below(self, only_leaves=False):
+        """Method that returns the number of nodes below the node"""
+        return 1
