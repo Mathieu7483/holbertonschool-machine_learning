@@ -195,32 +195,28 @@ class Decision_Tree():
 
     def fit_node(self, node):
         """Recursively fits the tree by splitting nodes"""
-        # Choix du split
         node.feature, node.threshold = self.split_criterion(node)
-
-        # Création des masques booléens pour les enfants
         left_population = node.sub_population & (
             self.explanatory[:, node.feature] > node.threshold)
         right_population = node.sub_population & (
             self.explanatory[:, node.feature] <= node.threshold)
 
-        # Conditions pour être une feuille
+        # leaf conditions
         def is_leaf(pop, depth):
             if np.sum(pop) < self.min_pop or depth >= self.max_depth:
                 return True
-            # Vérifier si tous les individus ont la même classe
             if np.unique(self.target[pop]).size == 1:
                 return True
             return False
 
-        # Enfant gauche
+        # left child
         if is_leaf(left_population, node.depth + 1):
             node.left_child = self.get_leaf_child(node, left_population)
         else:
             node.left_child = self.get_node_child(node, left_population)
             self.fit_node(node.left_child)
 
-        # Enfant droit
+        # right child
         if is_leaf(right_population, node.depth + 1):
             node.right_child = self.get_leaf_child(node, right_population)
         else:
@@ -229,7 +225,6 @@ class Decision_Tree():
 
     def get_leaf_child(self, node, sub_population):
         """Creates and returns a leaf child"""
-        # Classe la plus représentée (mode)
         value = np.bincount(self.target[sub_population]).argmax()
         leaf_child = Leaf(value)
         leaf_child.depth = node.depth + 1
@@ -252,7 +247,6 @@ class Decision_Tree():
 
         self.explanatory = explanatory
         self.target = target
-        # Initialisation avec un masque de True (tous les individus)
         self.root.sub_population = np.ones_like(self.target, dtype='bool')
 
         self.fit_node(self.root)
