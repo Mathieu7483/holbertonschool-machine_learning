@@ -284,6 +284,45 @@ class Decision_Tree():
                 f"{self.accuracy(self.explanatory, self.target)}"
             )
 
+    def possible_thresholds(self,node,feature):
+        values = np.unique((self.explanatory[:,feature])[node.sub_population])
+        return (values[1:]+values[:-1])/2
+
+    def Gini_split_criterion_one_feature(self,node,feature):
+        thresholds = self.possible_thresholds(node,feature)
+        best_threshold = None
+        best_gini = np.inf
+
+        for threshold in thresholds:
+            left_population = node.sub_population & (
+                self.explanatory[:, feature] > threshold)
+            right_population = node.sub_population & (
+                self.explanatory[:, feature] <= threshold)
+
+            if np.sum(left_population) == 0 or np.sum(right_population) == 0:
+                continue
+
+            gini_left = 1 - np.sum(
+                (np.bincount(self.target[left_population]) /
+                 np.sum(left_population)) ** 2)
+            gini_right = 1 - np.sum(
+                (np.bincount(self.target[right_population]) /
+                 np.sum(right_population)) ** 2)
+
+            gini_split = (np.sum(left_population) * gini_left +
+                          np.sum(right_population) * gini_right) / np.sum(node.sub_population)
+
+            if gini_split < best_gini:
+                best_gini = gini_split
+                best_threshold = threshold
+
+        return best_threshold, best_gini
+
+    def Gini_split_criterion(self,node):
+        X=np.array([self.Gini_split_criterion_one_feature(node,i) for i in range(self.explanatory.shape[1])])
+        i =np.argmin(X[:,1])
+        return i, X[i,0]
+
     def __str__(self):
         """Visual representation of the tree"""
         return str(self.root)
