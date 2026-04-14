@@ -15,6 +15,9 @@
 *main.py
 7-main_1.py
 7-main_2.py
+8-main_1.py
+8-main_2.py
+
 # Ignorer les generations de cache
 __pycache__
 # ignorer les fichiers compilés Python
