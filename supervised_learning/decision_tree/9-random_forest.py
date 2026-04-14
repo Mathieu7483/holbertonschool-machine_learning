@@ -16,29 +16,29 @@ class Random_Forest:
         self.max_depth = max_depth
         self.min_pop = min_pop
         self.seed = seed
+        self.trees = []
 
     def predict(self, explanatory):
         """Predict the class labels for the input data"""
         tree_predictions = np.array([tree.predict(explanatory)
-                                     for tree in self.trees])
-        # Majority vote
+                                 for tree in self.trees]).astype(int)
         return np.apply_along_axis(lambda x: np.bincount(x).argmax(),
                                    axis=0, arr=tree_predictions)
 
     def fit(self, explanatory, target, n_trees=100, verbose=0):
         self.target = target
         self.explanatory = explanatory
-        self.trees = []
+        self.numpy_preds = []
         depths = []
         nodes = []
         leaves = []
         accuracies = []
         for i in range(n_trees):
             T = Decision_Tree(max_depth=self.max_depth,
-                              min_pop=self.min_pop,
-                              seed=self.seed + i)
+                              min_pop=self.min_pop, seed=self.seed + i)
             T.fit(explanatory, target)
             self.trees.append(T)
+            self.numpy_preds.append(T.predict)
             depths.append(T.depth())
             nodes.append(T.count_nodes())
             leaves.append(T.count_nodes(only_leaves=True))
@@ -50,6 +50,10 @@ class Random_Forest:
     - Mean number of leaves          : {np.array(leaves).mean()}
     - Mean accuracy on training data : {np.array(accuracies).mean()}
     - Accuracy of the forest on td   : {self.accuracy(self.explanatory, self.target)}""")
+
+    def accuracy(self, explanatory, target):
+        """Calculates the accuracy of the forest"""
+        return np.sum(self.predict(explanatory) == target) / target.shape[0]
 
     def __str__(self):
         """Visual representation of the forest"""
