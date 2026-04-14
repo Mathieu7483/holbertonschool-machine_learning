@@ -26,6 +26,7 @@ class Random_Forest:
                                    axis=0, arr=tree_predictions)
 
     def fit(self, explanatory, target, n_trees=100, verbose=0):
+        """Fit the random forest to the training data"""
         self.target = target
         self.explanatory = explanatory
         self.numpy_preds = []
