@@ -21,7 +21,7 @@ class Random_Forest:
     def predict(self, explanatory):
         """Predict the class labels for the input data"""
         tree_predictions = np.array([tree.predict(explanatory)
-                                 for tree in self.trees]).astype(int)
+                                     for tree in self.trees]).astype(int)
         return np.apply_along_axis(lambda x: np.bincount(x).argmax(),
                                    axis=0, arr=tree_predictions)
 
@@ -44,12 +44,13 @@ class Random_Forest:
             leaves.append(T.count_nodes(only_leaves=True))
             accuracies.append(T.accuracy(T.explanatory, T.target))
         if verbose == 1:
+            forest_acc = self.accuracy(self.explanatory, self.target)
             print(f"""  Training finished.
     - Mean depth                     : {np.array(depths).mean()}
     - Mean number of nodes           : {np.array(nodes).mean()}
     - Mean number of leaves          : {np.array(leaves).mean()}
     - Mean accuracy on training data : {np.array(accuracies).mean()}
-    - Accuracy of the forest on td   : {self.accuracy(self.explanatory, self.target)}""")
+    - Accuracy of the forest on td   : {forest_acc}""")
 
     def accuracy(self, explanatory, target):
         """Calculates the accuracy of the forest"""
