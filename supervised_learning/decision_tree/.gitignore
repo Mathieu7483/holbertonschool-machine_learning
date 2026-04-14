@@ -17,6 +17,12 @@
 7-main_2.py
 8-main_1.py
 8-main_2.py
+9-main_1.py
+9-main_2.py
+10-main_1.py
+10-main_2.py
+11-main_1.py
+11-main_2.py
 
 # Ignorer les generations de cache
 __pycache__
