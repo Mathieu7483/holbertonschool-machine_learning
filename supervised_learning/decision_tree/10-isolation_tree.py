@@ -19,43 +19,58 @@ class Isolation_Random_Tree():
         self.min_pop = 1
 
     def __str__(self):
-        pass
+        return self.root.__str__()
 
     def depth(self):
-        pass
+        return self.root.max_depth_below()
 
     def count_nodes(self, only_leaves=False):
-        pass
+        return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def update_bounds(self):
-        pass
+        self.root.update_bounds_below()
 
     def get_leaves(self):
-        pass
+        return self.root.get_leaves_below()
 
     def update_predict(self):
-        pass
+        self.update_bounds()
+        leaves = self.get_leaves()
+        for leaf in leaves:
+            leaf.update_indicator()
+        self.predict = lambda A: np.array([
+            self.root.pred(x) for x in A
+        ])
 
     def np_extrema(self, arr):
         return np.min(arr), np.max(arr)
 
     def random_split_criterion(self, node):
-        pass
+        diff = 0
+        while diff == 0:
+            feature = self.rng.integers(0, self.explanatory.shape[1])
+            feature_min, feature_max = self.np_extrema(
+                self.explanatory[:, feature][node.sub_population]
+            )
+            diff = feature_max - feature_min
+        threshold = self.rng.uniform(feature_min, feature_max)
+        return feature, threshold
 
     def get_leaf_child(self, node, sub_population):
-        leaf_child = Leaf()
+        leaf_child = Leaf(node.depth + 1)
         leaf_child.depth = node.depth + 1
         leaf_child.subpopulation = sub_population
         return leaf_child
 
     def get_node_child(self, node, sub_population):
-        pass
+        n = Node()
+        n.depth = node.depth + 1
+        n.sub_population = sub_population
+        return n
 
     def fit_node(self, node):
-        """Recursively trains the nodes of the isolation tree"""
         node.feature, node.threshold = self.random_split_criterion(node)
 
-        # Division de la population selon le seuil
         left_pop = node.sub_population & (
             self.explanatory[:, node.feature] < node.threshold
         )
@@ -82,10 +97,8 @@ class Isolation_Random_Tree():
             self.fit_node(node.right_child)
 
     def fit(self, explanatory, verbose=0):
-        """Trains the isolation tree"""
         self.split_criterion = self.random_split_criterion
         self.explanatory = explanatory
-        # Correction de l'initialisation de sub_population
         self.root.sub_population = np.ones(explanatory.shape[0], dtype='bool')
 
         self.fit_node(self.root)
