@@ -7,8 +7,9 @@ Leaf = __import__('8-build_decision_tree').Leaf
 
 
 class Isolation_Random_Tree():
-    """Isolation Random Tree Classifier"""
+    """Class that represents an isolation tree"""
     def __init__(self, max_depth=10, seed=0, root=None):
+        """Class that represents an isolation tree"""
         self.rng = np.random.default_rng(seed)
         if root:
             self.root = root
