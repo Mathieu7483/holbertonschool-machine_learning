@@ -2,7 +2,6 @@
 """Isolation Random Tree for outlier detection"""
 
 import numpy as np
-# Utilisation de l'import dynamique tel que requis par l'énoncé
 Node = __import__('8-build_decision_tree').Node
 Leaf = __import__('8-build_decision_tree').Leaf
 
@@ -15,12 +14,13 @@ class Isolation_Random_Tree():
             self.root = root
         else:
             self.root = Node(is_root=True)
-        self.explanatory = None
-        self.max_depth = max_depth
-        self.predict = None
-        self.min_pop = 1
+            self.explanatory = None
+            self.max_depth = max_depth
+            self.predict = None
+            self.min_pop = 1
 
     def __str__(self):
+        """Returns the string representation of the tree."""
         return self.root.__str__()
 
     def depth(self):
@@ -37,13 +37,19 @@ class Isolation_Random_Tree():
 
     def get_leaves(self):
         """Returns the list of the leaves of the tree."""
-        self.root.get_leaves_below()
+        return self.root.get_leaves_below()
 
     def update_predict(self):
-        """Updates the 'predict' method of the tree."""
+        """Updates the predict method of the tree."""
         self.update_bounds()
         leaves = self.get_leaves()
-        self.predict = lambda A: np.array([self.root.pred(x) for x in A])
+        for leaf in leaves:
+            leaf.update_indicator()
+
+        leaf_values = np.array([leaf.value for leaf in leaves])
+
+        self.predict = lambda A: leaf_values[np.argmax(
+            np.array([leaf.indicator(A) for leaf in leaves]), axis=0)]
 
     def np_extrema(self, arr):
         """Returns the minimum and maximum of a numpy array."""
@@ -55,10 +61,10 @@ class Isolation_Random_Tree():
         while diff == 0:
             feature = self.rng.integers(0, self.explanatory.shape[1])
             feature_min, feature_max = self.np_extrema(
-                self.explanatory[:, feature][node.sub_population]
-            )
+                self.explanatory[:, feature][node.sub_population])
             diff = feature_max - feature_min
-        threshold = self.rng.uniform(feature_min, feature_max)
+        threshold = ((1 - self.rng.uniform()) * feature_min +
+                     self.rng.uniform() * feature_max)
         return feature, threshold
 
     def get_leaf_child(self, node, sub_population):
@@ -81,14 +87,12 @@ class Isolation_Random_Tree():
         node.feature, node.threshold = self.random_split_criterion(node)
 
         left_pop = node.sub_population & (
-            self.explanatory[:, node.feature] < node.threshold
-        )
+            self.explanatory[:, node.feature] < node.threshold)
         right_pop = node.sub_population & (
-            self.explanatory[:, node.feature] >= node.threshold
-        )
+            self.explanatory[:, node.feature] >= node.threshold)
 
-        is_left_leaf = (np.sum(left_pop) <= self.min_pop or
-                        node.depth + 1 >= self.max_depth)
+        is_left_leaf = (np.sum(left_pop) <= 1 or
+                        node.depth >= self.max_depth - 1)
 
         if is_left_leaf:
             node.left_child = self.get_leaf_child(node, left_pop)
@@ -96,8 +100,8 @@ class Isolation_Random_Tree():
             node.left_child = self.get_node_child(node, left_pop)
             self.fit_node(node.left_child)
 
-        is_right_leaf = (np.sum(right_pop) <= self.min_pop or
-                         node.depth + 1 >= self.max_depth)
+        is_right_leaf = (np.sum(right_pop) <= 1 or
+                         node.depth >= self.max_depth - 1)
 
         if is_right_leaf:
             node.right_child = self.get_leaf_child(node, right_pop)
@@ -115,8 +119,7 @@ class Isolation_Random_Tree():
         self.update_predict()
 
         if verbose == 1:
-            print(f"  Training finished.\n"
-                  f"    - Depth                     : {self.depth()}\n"
-                  f"    - Number of nodes           : {self.count_nodes()}\n"
-                  f"    - Number of leaves          : "
-                  f"{self.count_nodes(only_leaves=True)}")
+            print(f"""  Training finished.
+    - Depth                     : {self.depth()}
+    - Number of nodes           : {self.count_nodes()}
+    - Number of leaves          : {self.count_nodes(only_leaves=True)}""")
