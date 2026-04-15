@@ -16,17 +16,20 @@ class Isolation_Random_Forest():
         self.seed = seed
 
     def predict(self, explanatory):
+        """Predict the target for the given explanatory variables"""
         predictions = np.array([f(explanatory) for f in self.numpy_preds])
         return predictions.mean(axis=0)
 
     def fit(self, explanatory, n_trees=100, verbose=0):
+        """Fit the forest to the data"""
         self.explanatory = explanatory
         self.numpy_preds = []
         depths = []
         nodes = []
         leaves = []
         for i in range(n_trees):
-            T = Isolation_Random_Tree(max_depth=self.max_depth, seed=self.seed + i)
+            T = Isolation_Random_Tree(max_depth=self.max_depth,
+                                      seed=self.seed + i)
             T.fit(explanatory)
             self.numpy_preds.append(T.predict)
             depths.append(T.depth())
