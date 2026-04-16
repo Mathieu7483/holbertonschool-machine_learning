@@ -63,11 +63,3 @@ Cela générera un fichier `bassins2.png` montrant les zones de densité et iden
 ## ✍️ Auteur
 
   * **Mathieu** - *Programming student, specialization Machine Learning* - [👤 My Github profile](https://github.com/Mathieu7483)
-
------
-
-### 👨‍🏫 Le mot du Prof
-
-Mathieu, la tâche 11 est cruciale. Ta méthode `suspects` doit trier les individus par profondeur croissante. C'est le moment où tu passes de la théorie à la pratique : identifier concrètement des données aberrantes dans un dataset.
-
-**Maintenant que tu as dompté les arbres, es-tu prêt à explorer les réseaux de neurones (Classification Using Neural Networks) pour ton prochain projet ?**
