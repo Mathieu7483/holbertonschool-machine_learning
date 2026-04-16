@@ -29,15 +29,15 @@ Plutôt que d'utiliser *Scikit-Learn*, nous avons construit ici chaque brique : 
 
 | \# | Tâche | Fichier | Description |
 | :--- | :--- | :--- | :--- |
-| **0** | **Depth** | `0-cp_depth.py` | Calcul récursif de la profondeur maximale de l'arbre. |
-| **1** | **Nodes/Leaves** | `1-count_nodes.py` | Comptage du nombre total de nœuds et de feuilles. |
-| **2** | **Print Tree** | `2-print_tree.py` | Visualisation textuelle de la structure de l'arbre. |
-| **3** | **Get Leaves** | `3-get_leaves.py` | Récupération de la liste de toutes les feuilles. |
-| **4** | **Bounds** | `4-update_bounds.py` | Gestion des seuils (thresholds) pour les variables continues. |
-| **5** | **Indicator** | `5-update_indicator.py` | Détermination des individus appartenant à un nœud spécifique. |
-| **6** | **Predict** | `6-predict.py` | Implémentation de la fonction de prédiction finale. |
-| **7** | **Fit** | `7-build_tree.py` | Entraînement de l'arbre par division récursive. |
-| **8** | **Gini** | `8-gini_split.py` | Utilisation de l'impureté de Gini comme critère de split. |
+| **0** | **Depth** | `0-build_decision_tree.py` | Calcul récursif de la profondeur maximale de l'arbre. |
+| **1** | **Nodes/Leaves** | `1-build_decision_tree.py` | Comptage du nombre total de nœuds et de feuilles. |
+| **2** | **Print Tree** | `2-build_decision_tree.py` | Visualisation textuelle de la structure de l'arbre. |
+| **3** | **Get Leaves** | `3-build_decision_tree.py` | Récupération de la liste de toutes les feuilles. |
+| **4** | **Bounds** | `4-build_decision_tree.py` | Gestion des seuils (thresholds) pour les variables continues. |
+| **5** | **Indicator** | `5-build_decision_tree.py` | Détermination des individus appartenant à un nœud spécifique. |
+| **6** | **Predict** | `6-build_decision_tree.py` | Implémentation de la fonction de prédiction finale. |
+| **7** | **Fit** | `7-build_decision_tree.py` | Entraînement de l'arbre par division récursive. |
+| **8** | **Gini** | `8-build_decision_tree.py` | Utilisation de l'impureté de Gini comme critère de split. |
 | **9** | **Random Forests** | `9-random_forest.py` | Agrégation de plusieurs arbres de décision. |
 | **10** | **IRF 1** | `10-isolation_tree.py` | Arbres d'isolation pour la détection d'outliers. |
 | **11** | **IRF 2** | `11-isolation_forest.py` | Forêt d'isolation et détection des suspects (anomalies). |
