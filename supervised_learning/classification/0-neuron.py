@@ -3,8 +3,10 @@
 
 import numpy as np
 
+
 class Neuron:
-    """Class Neuron that defines a single neuron performing binary classification"""
+    """Class Neuron that defines a single neuron
+    performing binary classification"""
 
     def __init__(self, nx):
         """Constructor method
