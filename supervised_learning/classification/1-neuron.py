@@ -16,27 +16,24 @@ class Neuron:
             nx: is the number of input features to the neuron
         """
         if not isinstance(nx, int):
-            raise TypeError("nx must be an integer")
+            raise TypeError("nx must be a integer")
         if nx < 1:
-            raise ValueError("nx must be a positive integer")
-        self.W = np.random.normal(size=(1, nx))
-        self.b = 0
-        self.A = 0
+            raise ValueError("nx must be positive")
+        self.__W = np.random.normal(size=(1, nx))
+        self.__b = 0
+        self.__A = 0
 
+    @property
+    def A(self):
+        """The getter method for the output of the neuron (prediction)"""
+        return self.__A
 
-@property
-def A(self):
-    """The getter method for the output of the neuron (prediction)"""
-    return self.__A
+    @property
+    def W(self):
+        """The getter method for the weights vector of the neuron"""
+        return self.__W
 
-
-@property
-def W(self):
-    """The getter method for the weights vector of the neuron"""
-    return self.__W
-
-
-@property
-def b(self):
-    """The getter method for the bias of the neuron"""
-    return self.__b
+    @property
+    def b(self):
+        """The getter method for the bias of the neuron"""
+        return self.__b
