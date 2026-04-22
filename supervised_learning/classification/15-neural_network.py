@@ -126,7 +126,8 @@ class NeuralNetwork:
         self.__W1 -= alpha * dW1
         self.__b1 -= alpha * db1
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05,
+              verbose=True, graph=True, step=100):
         """Tains the neural network"""
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
