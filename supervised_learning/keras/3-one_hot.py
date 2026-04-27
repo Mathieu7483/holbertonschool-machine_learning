@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
-"""converts a numeric label vector into a one-hot matrix"""
+"""
+Converts a label vector into a one-hot matrix.
+"""
+import tensorflow.keras as K
 
-from tensorflow import keras as K
 
 def one_hot(labels, classes=None):
-  """converts a numeric label vector into a one-hot matrix"""
-  return K.utils.to_categorical(labels, num_classes=classes)
+    """
+    Converts a label vector into a one-hot matrix.
+
+    Args:
+        labels (numpy.ndarray): The labels to convert.
+        classes (int): The number of classes.
+
+    Returns:
+        numpy.ndarray: The one-hot matrix.
+    """
+    one_hot_matrix = K.utils.to_categorical(labels, classes)
+    return one_hot_matrix
