@@ -53,3 +53,6 @@ node_modules/
 
 # Ignorer les generations de cache
 __pycache__
+
+#ignorer le dataset
+MNIST.npz
