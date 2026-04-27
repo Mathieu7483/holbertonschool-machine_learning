@@ -51,6 +51,5 @@ venv
 #ignorer le node module
 node_modules/
 
-#ignorer les fichiers pycache
-__pycache__/
-*.pyc
+# Ignorer les generations de cache
+__pycache__
