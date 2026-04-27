@@ -53,4 +53,4 @@ node_modules/
 
 #ignorer les fichiers pycache
 __pycache__/
-
+*.pyc
