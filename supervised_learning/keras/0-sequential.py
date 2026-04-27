@@ -18,7 +18,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
         The keras model
     """
 
-    import keras as K
+    import tensorflow.keras as K
     model = K.Sequential()
     for i in range(len(layers)):
         if i == 0:
