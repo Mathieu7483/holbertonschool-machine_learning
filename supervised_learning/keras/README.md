@@ -1,5 +1,5 @@
 <p align="center"\>
-<img src="https://github.com/Mathieu7483/Aiko78-Photgraphy/blob/main/img/Machine%20Learning.png"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/supervised_learning/keras/a-minimalist-conceptual-art-piece-of-a-neural-netw.png"\>
 </p>
 
 # TensorFlow 2 & Keras: Deep Learning Framework
