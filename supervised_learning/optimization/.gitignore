@@ -53,3 +53,6 @@ node_modules/
 
 #ignorer le fichier dataset
 MNIST.npz
+
+#ignorer le model
+model.h5
