@@ -1,0 +1,53 @@
+# Ne pas ignorer README.md
+!README.md
+# Ignorer les fichiers main.c spécifiquement
+*main.c
+# Ignorer les fichiers de sortie générés par GCC
+*.exe
+# Ignorer les fichiers de sauvegarde de l'éditeur
+*~
+*.bak
+# Ignorer les fichiers de log générés par les tests ou le débogage
+*.log
+#ignore les fichiers .out
+*.out
+# Ignorer les fichiers main.c spécifiquement
+*main.py
+7-main_1.py
+7-main_2.py
+8-main_1.py
+8-main_2.py
+9-main_1.py
+9-main_2.py
+10-main_1.py
+10-main_2.py
+11-main_1.py
+11-main_2.py
+
+# Ignorer les generations de cache
+__pycache__
+# ignorer les fichiers compilés Python
+*.pyc
+*.pyo
+# Ignorer les dossiers virtuels
+venv/
+#ignorer les fichiers zip
+*.zip
+#ignorer les fichiers bson
+*.bson
+#ignorer les fichiers tar
+*.tar
+#ignorer les fichiers json
+*.json
+#ignorer les fichiers dump
+*.dump
+#ignorer le dossier dump
+dump/
+#ignorer le venv/
+venv/
+venv
+.env
+
+#ignorer le node module
+node_modules/
+
