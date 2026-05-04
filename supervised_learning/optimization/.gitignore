@@ -53,6 +53,8 @@ node_modules/
 
 #ignorer le fichier dataset
 MNIST.npz
+Binary_train.npz
+Binary_test.npz
 
 #ignorer le model
 model.h5
