@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
-"""Write the function def moving_average(data, beta):
-that calculates the weighted moving average of a data set:"""
-import numpy as np
+"""Module for calculating the weighted moving average of a dataset."""
 
 
 def moving_average(data, beta):
-    """calculates the weighted moving average of a data set"""
-    if not isinstance(data, list) or len(data) == 0:
-        return None
-    if not isinstance(beta, float) or beta < 0 or beta > 1:
-        return None
+    """
+    Calculate the weighted moving average of a data set with bias correction.
 
-    m_avg = []
+    Parameters:
+    data (list): List of data to calculate the moving average of.
+    beta (float): The weight used for the moving average.
+
+    Returns:
+    list: List containing the moving averages of data.
+    """
     v = 0
-
-    for i in range(len(data)):
-        v = beta * v + (1 - beta) * data[i]
-        m_avg.append(v / (1 - beta ** (i + 1)))
-
-    return m_avg
+    moving_averages = []
+    for i, value in enumerate(data):
+        v = beta * v + (1 - beta) * value
+        bias_correction = 1 - beta ** (i + 1)
+        moving_avg = v / bias_correction
+        moving_averages.append(moving_avg)
+    return moving_averages
