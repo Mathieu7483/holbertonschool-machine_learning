@@ -2,7 +2,7 @@
 """Write the function def create_momentum_op(alpha, beta1):
 that sets up the gradient descent with momentum
 optimization algorithm in TensorFlow::"""
-import numpy as np
+import tensorflow as tf
 
 
 def create_momentum_op(alpha, beta1):
@@ -17,6 +17,5 @@ def create_momentum_op(alpha, beta1):
     Returns:
     tf.keras.optimizers.Optimizer: An instance of the Momentum optimizer.
     """
-    import tensorflow as tf
-
+  
     return tf.keras.optimizers.SGD(learning_rate=alpha, momentum=beta1)
