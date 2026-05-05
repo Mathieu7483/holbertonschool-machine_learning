@@ -17,5 +17,5 @@ def create_momentum_op(alpha, beta1):
     Returns:
     tf.keras.optimizers.Optimizer: An instance of the Momentum optimizer.
     """
-  
+
     return tf.keras.optimizers.SGD(learning_rate=alpha, momentum=beta1)
