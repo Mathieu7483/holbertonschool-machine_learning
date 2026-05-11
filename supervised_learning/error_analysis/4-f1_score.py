@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
-"""Module for calcultaing the F1 score from a confusion matrix."""
+"""
+Module for calculating F1 score from a confusion matrix.
+"""
 import numpy as np
+sensitivity = __import__('1-sensitivity').sensitivity
 precision = __import__('2-precision').precision
-specificity = __import__('3-specificity').specificity
 
 
 def f1_score(confusion):
     """
-    Calculates the F1 score from a confusion matrix.
+    Calculates the F1 score for each class in a confusion matrix.
+
     Args:
-    confusion (numpy.ndarray): A confusion matrix of shape (classes, classes)
-                                    with row indices representing the correct
-                                    labels and column indices representing the
-                                    predicted labels.
+        confusion (numpy.ndarray): A confusion numpy.ndarray of shape
+            (classes, classes) where row indices represent the correct
+            labels and column indices represent the predicted labels.
+
     Returns:
-        numpy.ndarray: A numpy.ndarray of shape (classes,) containing the
-                        F1 score of each class.
+        numpy.ndarray: A numpy.ndarray of shape (classes,) containing
+        the F1 score of each class.
     """
-    # Calculate precision and specificity for each class
+    # Calculate sensitivity and precision for each class
+    sens = sensitivity(confusion)
     prec = precision(confusion)
-    spec = specificity(confusion)
 
-    # Calculate recall for each class using specificity
-    recall = spec
-
-    # Calculate F1 score for each class
-    f1 = 2 * (prec * recall) / (prec + recall)
+    # Calculate F1 score
+    f1 = 2 * (prec * sens) / (prec + sens)
 
     return f1
