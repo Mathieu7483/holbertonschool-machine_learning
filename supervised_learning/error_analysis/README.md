@@ -1,3 +1,7 @@
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/supervised_learning/error_analysis/an-abstract-representation-of-mathematical-formula.png"\>
+</p>
+
 # Error Analysis in Machine Learning
 
 ## 📉 Description
@@ -46,6 +50,7 @@ La matrice de confusion est un outil où les lignes représentent les classes r�
 * Les éléments de la **diagonale** sont les prédictions correctes.
 * Les éléments **hors diagonale** révèlent précisément quel chiffre (dans le cas de MNIST) le modèle confond avec un autre (par exemple, confondre un `4` avec un `9`).
 
-## ✍️ Auteur
+## ✍️ Author
 
-* **Mathieu** - *Étudiant en programmation (41 ans)* - [GitHub Profile](https://www.google.com/search?q=https://github.com/Mathieu7483)
+  * **Mathieu** - *Programming student, specialization Machine Learning* - [👤 My Github profile](https://github.com/Mathieu7483)
+
