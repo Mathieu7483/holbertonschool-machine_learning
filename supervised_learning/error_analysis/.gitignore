@@ -56,6 +56,7 @@ MNIST.npz
 Binary_Train.npz
 Binary_test.npz
 labels_logits.npz
+confusion.npz
 
 #ignorer le model
 model.h5
