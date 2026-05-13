@@ -58,3 +58,7 @@ Binary_test.npz
 
 #ignorer le model
 model.h5
+model_reg.h5
+model_reg_l1.h5
+model_reg_l2.h5
+model_reg_l1_l2.h5
