@@ -40,8 +40,8 @@ def convolve_channels(images, kernel, padding='same'):
         ph, pw = padding
     padded_images = np.pad(
         images, ((0, 0), (ph, ph), (pw, pw), (0, 0)), mode='constant')
-    conv_h = h + 2 * ph - kh
-    conv_w = w + 2 * pw - kw
+    conv_h = h + 2 * ph - kh + 1
+    conv_w = w + 2 * pw - kw + 1
     convolved_images = np.zeros((m, conv_h, conv_w))
     for i in range(conv_h):
         for j in range(conv_w):
