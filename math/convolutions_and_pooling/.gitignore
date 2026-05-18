@@ -55,6 +55,7 @@ node_modules/
 MNIST.npz
 Binary_Train.npz
 Binary_test.npz
+animals_1.npz
 
 #ignorer le model
 model.h5
