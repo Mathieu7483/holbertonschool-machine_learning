@@ -51,3 +51,5 @@ venv
 #ignorer le node module
 node_modules/
 
+#ignorer les datasets
+*.npz
