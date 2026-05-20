@@ -4,7 +4,7 @@ over a convolutional layer of a neural network:"""
 import numpy as np
 
 
-def conv_forward(A_prev, W, b, activation, padding='same'):
+def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     """performs forward propagation over a convolutional
      layer of a neural network:
     A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c_prev)
@@ -26,39 +26,31 @@ def conv_forward(A_prev, W, b, activation, padding='same'):
     indicating the type of padding used
     Returns: a numpy.ndarray containing the output
     of the convolutional layer"""
-    m, h_prev, w_prev, _ = A_prev.shape
-    kh, kw, _, c_new = W.shape
+    m, h_prev, w_prev, c_prev = A_prev.shape
+    kh, kw, c_prev, c_new = W.shape
+    sh, sw = stride
 
     if padding == 'same':
         pad_h = (kh - 1) // 2
         pad_w = (kw - 1) // 2
-    else:
+    elif padding == 'valid':
         pad_h = 0
         pad_w = 0
+
+    h_output = (h_prev + 2 * pad_h - kh) // sh + 1
+    w_output = (w_prev + 2 * pad_w - kw) // sw + 1
 
     A_padded = np.pad(A_prev,
                       ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)),
                       mode='constant')
 
-    h_new = h_prev + 2 * pad_h - kh + 1
-    w_new = w_prev + 2 * pad_w - kw + 1
+    convolved = np.zeros((m, h_output, w_output, c_new))
 
-    Z = np.zeros((m, h_new, w_new, c_new))
+    for i in range(h_output):
+        for j in range(w_output):
+            region = A_padded[:, i * sh:i * sh + kh, j * sw:j * sw + kw, :]
+            for k in range(c_new):
+                convolved[:, i, j, k] = np.sum((region * W[:, :, :, k]),
+                                               axis=(1, 2, 3))
 
-    for i in range(m):
-        for h in range(h_new):
-            for w in range(w_new):
-                for c in range(c_new):
-                    vert_start = h
-                    vert_end = h + kh
-                    horiz_start = w
-                    horiz_end = w + kw
-
-                    A_slice = A_padded[i,
-                                       vert_start:vert_end,
-                                       horiz_start:horiz_end,
-                                       :]
-                    Z[i, h, w, c] = np.sum(A_slice * W
-                                           [:, :, :, c]) + b[:, :, :, c]
-    A = activation(Z)
-    return A
+    return activation(convolved + b)
