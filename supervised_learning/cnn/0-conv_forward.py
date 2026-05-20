@@ -5,7 +5,8 @@ import numpy as np
 
 
 def conv_forward(A_prev, W, b, activation, padding='same'):
-    """performs forward propagation over a convolutional layer of a neural network:
+    """performs forward propagation over a convolutional
+     layer of a neural network:
     A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c_prev)
     containing the output of the previous layer
         m is the number of examples
@@ -23,8 +24,9 @@ def conv_forward(A_prev, W, b, activation, padding='same'):
     activation is an activation function applied to the convolution
     padding is a string that is either same or valid,
     indicating the type of padding used
-    Returns: a numpy.ndarray containing the output of the convolutional layer"""
-    m, h_prev, w_prev, c_prev = A_prev.shape
+    Returns: a numpy.ndarray containing the output
+    of the convolutional layer"""
+    m, h_prev, w_prev, _ = A_prev.shape
     kh, kw, _, c_new = W.shape
 
     if padding == 'same':
@@ -35,7 +37,7 @@ def conv_forward(A_prev, W, b, activation, padding='same'):
         pad_w = 0
 
     A_padded = np.pad(A_prev,
-                      ((0,), (pad_h,), (pad_w,), (0,)),
+                      ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)),
                       mode='constant')
 
     h_new = h_prev + 2 * pad_h - kh + 1
@@ -56,7 +58,7 @@ def conv_forward(A_prev, W, b, activation, padding='same'):
                                        vert_start:vert_end,
                                        horiz_start:horiz_end,
                                        :]
-                    Z[i, h, w, c] = np.sum(A_slice * W[:, :, :, c
-                    ]) + b[:, :, :, c]
+                    Z[i, h, w, c] = np.sum(A_slice * W
+                                           [:, :, :, c]) + b[:, :, :, c]
     A = activation(Z)
     return A
