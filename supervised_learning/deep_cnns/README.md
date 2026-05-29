@@ -1,3 +1,7 @@
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/supervised_learning/deep_cnns/a-realistic--cinematic-photograph-of-a-deep-learni.png"\>
+</p>
+
 # Deep Convolutional Architectures
 
 ## 🏢 Description
