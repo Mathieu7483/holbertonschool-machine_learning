@@ -18,33 +18,29 @@ def identity_block(A_prev, filters):
     Returns: the activated output of the identity block
     """
     F11, F3, F12 = filters
-    initializer = K.initializers.he_normal(seed=0)
 
-    X = K.layers.Conv2D(
-        filters=F11,
-        kernel_size=(1, 1),
-        padding='same',
-        activation='relu'
-    )(A_prev)
-    batch_norm_1 = K.layers.BatchNormalization(axis=3)(X)
+    # First component of the main path
+    X = K.layers.Conv2D(filters=F11, kernel_size=(1, 1), padding='same',
+                        kernel_initializer=K.initializers.he_normal(seed=0)
+                        )(A_prev)
+    X = K.layers.BatchNormalization(axis=3)(X)
+    X = K.layers.Activation('relu')(X)
 
-    X = K.layers.Conv2D(
-        filters=F3,
-        kernel_size=(3, 3),
-        padding='same',
-        activation='relu'
-    )(batch_norm_1)
-    batch_norm_2 = K.layers.BatchNormalization(axis=3)(X)
+    # Second component of the main path
+    X = K.layers.Conv2D(filters=F3, kernel_size=(3, 3), padding='same',
+                        kernel_initializer=K.initializers.he_normal(seed=0)
+                        )(X)
+    X = K.layers.BatchNormalization(axis=3)(X)
+    X = K.layers.Activation('relu')(X)
 
-    X = K.layers.Conv2D(
-        filters=F12,
-        kernel_size=(1, 1),
-        padding='same',
-        activation='relu'
-    )(batch_norm_2)
-    batch_norm_3 = K.layers.BatchNormalization(axis=3)(X)
+    # Third component of the main path
+    X = K.layers.Conv2D(filters=F12, kernel_size=(1, 1), padding='same',
+                        kernel_initializer=K.initializers.he_normal(seed=0)
+                        )(X)
+    X = K.layers.BatchNormalization(axis=3)(X)
 
-    X = K.layers.Add()([batch_norm_3, A_prev])
+    # Add shortcut value to main path, and pass it through a RELU activation
+    X = K.layers.Add()([X, A_prev])
     X = K.layers.Activation('relu')(X)
 
     return X
