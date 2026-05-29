@@ -12,33 +12,33 @@ def identity_block(A_prev, filters):
       F11 is the number of filters in the first 1x1 convolution
       F3 is the number of filters in the 3x3 convolution
       F12 is the number of filters in the second 1x1 convolution
-    All convolutions inside the inception block use relu activation.
+    All convolutions inside the block should be followed by batch
+    normalization along the channels axis and a rectified linear
+    activation (ReLU), respectively.
     Returns: the activated output of the identity block
     """
     F11, F3, F12 = filters
-
     conv_1x1 = K.layers.Conv2D(
         filters=F11,
         kernel_size=1,
         padding='same',
         activation='relu'
     )(A_prev)
-
+    batch_norm_1 = K.layers.BatchNormalization(axis=3)(conv_1x1)
     conv_3x3 = K.layers.Conv2D(
         filters=F3,
         kernel_size=3,
         padding='same',
         activation='relu'
-    )(conv_1x1)
-
+    )(batch_norm_1)
+    batch_norm_2 = K.layers.BatchNormalization(axis=3)(conv_3x3)
     conv_1x1_2 = K.layers.Conv2D(
         filters=F12,
         kernel_size=1,
         padding='same',
         activation='relu'
-    )(conv_3x3)
-
-    add = K.layers.Add()([conv_1x1_2, A_prev])
-    out = K.layers.Activation('relu')(add)
-
-    return out
+    )(batch_norm_2)
+    batch_norm_3 = K.layers.BatchNormalization(axis=3)(conv_1x1_2)
+    add = K.layers.Add()([batch_norm_3, A_prev])
+    output = K.layers.Activation('relu')(add)
+    return output
