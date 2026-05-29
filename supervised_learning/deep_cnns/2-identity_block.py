@@ -20,31 +20,31 @@ def identity_block(A_prev, filters):
     F11, F3, F12 = filters
     initializer = K.initializers.he_normal(seed=0)
 
-    conv_1x1 = K.layers.Conv2D(
+    X = K.layers.Conv2D(
         filters=F11,
         kernel_size=(1, 1),
         padding='same',
         activation='relu'
     )(A_prev)
-    batch_norm_1 = K.layers.BatchNormalization(axis=3)(conv_1x1)
+    batch_norm_1 = K.layers.BatchNormalization(axis=3)(X)
 
-    conv_3x3 = K.layers.Conv2D(
+    X = K.layers.Conv2D(
         filters=F3,
         kernel_size=(3, 3),
         padding='same',
         activation='relu'
     )(batch_norm_1)
-    batch_norm_2 = K.layers.BatchNormalization(axis=3)(conv_3x3)
+    batch_norm_2 = K.layers.BatchNormalization(axis=3)(X)
 
-    conv_1x1_2 = K.layers.Conv2D(
+    X = K.layers.Conv2D(
         filters=F12,
         kernel_size=(1, 1),
         padding='same',
         activation='relu'
     )(batch_norm_2)
-    batch_norm_3 = K.layers.BatchNormalization(axis=3)(conv_1x1_2)
+    batch_norm_3 = K.layers.BatchNormalization(axis=3)(X)
 
-    add = K.layers.Add()([batch_norm_3, A_prev])
-    output = K.layers.Activation('relu')(add)
+    X = K.layers.Add()([batch_norm_3, A_prev])
+    X = K.layers.Activation('relu')(X)
 
-    return output
+    return X
