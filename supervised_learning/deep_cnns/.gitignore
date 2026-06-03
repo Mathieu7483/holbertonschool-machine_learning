@@ -60,3 +60,7 @@ confusion.npz
 
 #ignorer le model
 model.h5
+
+#environnement virtuel
+myenv/
+
