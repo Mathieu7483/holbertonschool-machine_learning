@@ -137,8 +137,8 @@ if __name__ == "__main__":
                                    callbacks=[early_stopping, checkpoint],
                                    verbose=1)
 
-    # Save the final model in keras format
-    model.save(filepath='cifar10.keras')
+    # Save the final model in h5 format
+    model.save(filepath='cifar10.h5')
 
     # Evaluate on test set
     loss, accuracy = model.evaluate(x_test, y_test, verbose=1)
