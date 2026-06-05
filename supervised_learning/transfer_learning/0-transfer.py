@@ -3,8 +3,6 @@
 Transfer Knowledge with DenseNet121 on CIFAR-10
 """
 from tensorflow import keras as K
-import tensorflow as tf
-import matplotlib.pyplot as plt
 
 
 def preprocess_data(X, Y):
@@ -79,20 +77,6 @@ def plot_history(history, finetuning_history):
         finetuning_history.history['val_loss']
     epochs = range(len(acc))
 
-    plt.figure()
-    plt.plot(epochs, acc, 'bo', label='Training accuracy')
-    plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-    plt.title('Training and validation accuracy')
-    plt.legend()
-    plt.savefig('accuracy_plot.png')
-
-    plt.figure()
-    plt.plot(epochs, loss, 'bo', label='Training loss')
-    plt.plot(epochs, val_loss, 'b', label='Validation loss')
-    plt.title('Training and validation loss')
-    plt.legend()
-    plt.savefig('loss_plot.png')
-
 
 if __name__ == "__main__":
     # Load CIFAR-10 data
@@ -143,7 +127,3 @@ if __name__ == "__main__":
     # Evaluate on test set
     loss, accuracy = model.evaluate(x_test, y_test, verbose=1)
     print(f'Test accuracy: {accuracy * 100:.2f}%')
-
-    # Plot and save accuracy and loss graphs
-    plot_history(history, finetuning_history)
-    
