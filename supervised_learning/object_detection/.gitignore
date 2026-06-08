@@ -65,3 +65,8 @@ model.h5
 #ignorer l'environnement virtuel
 myenv/
 venv/
+
+#ignorer les fichiers de l'exercice
+coco_classes.txt
+yolo.h5
+yolo_images.zip
