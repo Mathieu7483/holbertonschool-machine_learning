@@ -17,7 +17,7 @@ class Yolo:
         IOU threshold for non-max suppression
         anchors is a numpy.ndarray of shape (outputs, anchor_boxes, 2)
         containing the anchor boxes:
-        outputs is the number of outputs (predictions) made by the Darknet model
+        outputs is the number of outputs (predicts) made by the Darknet model
         anchor_boxes is the number of anchor boxes used for each prediction
         2 => [anchor_box_width, anchor_box_height]
         Sets the public instance attributes:
