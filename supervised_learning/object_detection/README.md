@@ -1,3 +1,7 @@
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/supervised_learning/object_detection/a-realistic--cinematic-photograph-of-a-high-tech-c.png"\>
+</p>
+
 # Object Detection with YOLOv3
 
 ## 👁️ Description
