@@ -44,8 +44,7 @@ def build_model():
     inputs = K.Input(shape=(32, 32, 3))
 
     # Resize inputs to match the input size of DenseNet121
-    resized_inputs = K.layers.Lambda(lambda x: tf.image.resize(x, (224, 224))
-                                     )(inputs)
+    resized_inputs = K.layers.Resizing(224, 224)(inputs)
 
     # Pass the resized inputs through the base model
     base_model_output = base_model(resized_inputs, training=False)
@@ -58,24 +57,6 @@ def build_model():
     # Create the final model
     model = K.Model(inputs=inputs, outputs=outputs)
     return model
-
-
-def plot_history(history, finetuning_history):
-    """
-    Plots the training and validation accuracy and loss.
-
-    history: History object from the initial training
-    finetuning_history: History object from the fine-tuning
-    """
-    # Combine histories
-    acc = history.history['accuracy'] + \
-        finetuning_history.history['accuracy']
-    val_acc = history.history['val_accuracy'] + \
-        finetuning_history.history['val_accuracy']
-    loss = history.history['loss'] + finetuning_history.history['loss']
-    val_loss = history.history['val_loss'] + \
-        finetuning_history.history['val_loss']
-    epochs = range(len(acc))
 
 
 if __name__ == "__main__":
@@ -104,7 +85,7 @@ if __name__ == "__main__":
 
     # Train the model
     history = model.fit(x_train, y_train,
-                        epochs=10,
+                        epochs=5,
                         validation_data=(x_test, y_test),
                         callbacks=[early_stopping, checkpoint],
                         verbose=1)
@@ -116,7 +97,7 @@ if __name__ == "__main__":
                   metrics=['accuracy'])
 
     finetuning_history = model.fit(x_train, y_train,
-                                   epochs=10,
+                                   epochs=5,
                                    validation_data=(x_test, y_test),
                                    callbacks=[early_stopping, checkpoint],
                                    verbose=1)
