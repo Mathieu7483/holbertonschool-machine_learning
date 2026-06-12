@@ -56,7 +56,9 @@ class NST:
         else:
             new_w = 512
             new_h = int(h * (512 / w))
+
         resized_image = tf.image.resize(image, (new_h, new_w),
-                                        method=tf.image.ResizeMethod.AREA)
-        scaled_image = resized_image / 255.0
+                                        method=tf.image.ResizeMethod.BICUBIC)
+        clipped_image = tf.clip_by_value(resized_image, 0.0, 255.0)
+        scaled_image = clipped_image / 255.0
         return scaled_image[tf.newaxis, :]
