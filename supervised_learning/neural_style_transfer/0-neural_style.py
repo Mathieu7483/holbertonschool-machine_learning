@@ -19,13 +19,13 @@ class NST:
             alpha: the weight for the content cost
             beta: the weight for the style cost
         """
-        if not isinstance(content_image, np.ndarray) or content_image.ndim != 3 or \
-           content_image.shape[2] != 3:
+        if (not isinstance(content_image, np.ndarray) or
+                content_image.ndim != 3 or content_image.shape[2] != 3):
             raise TypeError(
                 "content_image must be a numpy.ndarray with shape (h, w, 3)"
             )
-        if not isinstance(style_image, np.ndarray) or style_image.ndim != 3 or \
-           style_image.shape[2] != 3:
+        if (not isinstance(style_image, np.ndarray) or
+                style_image.ndim != 3 or style_image.shape[2] != 3):
             raise TypeError(
                 "style_image must be a numpy.ndarray with shape (h, w, 3)"
             )
@@ -38,14 +38,13 @@ class NST:
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
         self.beta = beta
-        
 
     @staticmethod
     def scale_image(image):
         """Rescales an image such that its pixels values are between 0 and 1
            and its largest side is 512 pixels"""
-        if not isinstance(image, np.ndarray) or image.ndim != 3 or \
-           image.shape[2] != 3:
+        if (not isinstance(image, np.ndarray) or
+                image.ndim != 3 or image.shape[2] != 3):
             raise TypeError(
                 "image must be a numpy.ndarray with shape (h, w, 3)"
             )
@@ -57,8 +56,9 @@ class NST:
             new_w = 512
             new_h = int(h * (512 / w))
 
-        resized_image = tf.image.resize(image, (new_h, new_w),
-                                        method=tf.image.ResizeMethod.BICUBIC)
+        resized_image = tf.image.resize(
+            image, (new_h, new_w), method=tf.image.ResizeMethod.BICUBIC
+        )
         clipped_image = tf.clip_by_value(resized_image, 0.0, 255.0)
         scaled_image = clipped_image / 255.0
         return scaled_image[tf.newaxis, :]
