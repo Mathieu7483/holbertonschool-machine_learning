@@ -135,16 +135,20 @@ class NST:
         """
         # Ensure the images are preprocessed correctly
         preprocessed_style = tf.keras.applications.vgg19.preprocess_input(
-            self.style_image * 255)
+            self.style_image * 255.0)
         preprocessed_content = tf.keras.applications.vgg19.preprocess_input(
-            self.content_image * 255)
+            self.content_image * 255.0)
 
-        # Get the outputs from the model with preprocessed images as input
-        style_outputs = self.model(preprocessed_style)[:-1]
+        # Execute model forward pass and store raw outputs
+        style_outputs_raw = self.model(preprocessed_style)
+        content_outputs_raw = self.model(preprocessed_content)
 
-        # Set content_feature, no further processing required
-        self.content_feature = self.model(preprocessed_content)[-1]
+        # Correct slicing: Extract only the style layers (first 5 elements)
+        style_outputs = style_outputs_raw[:-1]
 
-        # Compute and set Gram matrices for the style layers outputs
-        self.gram_style_features = [self.gram_matrix(
-            output) for output in style_outputs]
+        # Correct slicing: Extract only the content layer (last element)
+        self.content_feature = content_outputs_raw[-1]
+
+        # Compute Gram matrices for each style layer output
+        self.gram_style_features = [self.gram_matrix(output)
+                                    for output in style_outputs]
