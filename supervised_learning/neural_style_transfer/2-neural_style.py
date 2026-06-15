@@ -121,5 +121,5 @@ class NST:
         # Normalization by the number of locations (h * w)
         input_shape = tf.shape(input_layer)
         nb_locations = tf.cast(input_shape[1] * input_shape[2], tf.float32)
-        
+
         return gram / nb_locations
