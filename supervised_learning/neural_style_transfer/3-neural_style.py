@@ -126,31 +126,25 @@ class NST:
         return gram / nb_locations
 
     def generate_features(self):
-        """Extracts the features used to calculate neural style cost
-
-        Sets the public instance attributes:
-            gram_style_features - a list of gram matrices from style layers
-            content_feature - the content layer output of the content image
         """
-        # Preprocess the style and content images for VGG19
-        preprocessed_style_image = (
-            tf.keras.applications.vgg19.preprocess_input(
-                self.style_image * 255.0
-            )
-        )
-        preprocessed_content_image = (
-            tf.keras.applications.vgg19.preprocess_input(
-                self.content_image * 255.0
-            )
-        )
+        Extract the features used to calculate neural style cost.
+        Sets the public instance attributes:
+            - gram_style_features - a list of gram matrices calculated from the
+                style layer outputs of the style image
+            - content_feature - the content layer output of the content image
+        """
+        # Ensure the images are preprocessed correctly
+        preprocessed_style = tf.keras.applications.vgg19.preprocess_input(
+            self.style_image * 255)
+        preprocessed_content = tf.keras.applications.vgg19.preprocess_input(
+            self.content_image * 255)
 
-        # Get the outputs of the model for the style and content images
-        style_outputs = self.model(preprocessed_style_image)
-        content_output = self.model(preprocessed_content_image)
+        # Get the outputs from the model with preprocessed images as input
+        style_outputs = self.model(preprocessed_style)[:-1]
 
-        # stock the gram matrices of the style layer outputs
-        self.gram_style_features = [self.gram_matrix(style_output)
-                                    for style_output in style_outputs[:-1]]
+        # Set content_feature, no further processing required
+        self.content_feature = self.model(preprocessed_content)[-1]
 
-        # stock the content layer output of the content image
-        self.content_feature = content_output[-1]
+        # Compute and set Gram matrices for the style layers outputs
+        self.gram_style_features = [self.gram_matrix(
+            output) for output in style_outputs]
