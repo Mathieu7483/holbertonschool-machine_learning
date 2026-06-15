@@ -93,22 +93,33 @@ class NST:
             inputs=vgg.input,
             outputs=style_outputs + [content_output])
 
-    def gram_matrix(self, input_layer):
-        """Calculates the gram matrix of an input layer
+    @staticmethod
+    def gram_matrix(input_layer):
+        """
+        Calculates the gram matrix of an input layer.
+
         Args:
-            input_layer: tf.Tensor of shape (1, h, w, c) containing the layer
-                         output whose gram matrix should be calculated
-                - h is the height of the layer
-                - w is the width of the layer
-                - c is the number of channels in the layer
+            input_layer (tf.Tensor or tf.Variable): A tensor of shape
+            (1, h, w, c) containing the layer output whose gram matrix
+            should be calculated.
+
+        Raises:
+            TypeError: If input_layer is not a tensor of rank 4.
+
         Returns:
-            tf.Tensor of shape (1, c, c) containing the gram matrix of the
-            input"""
-        if not isinstance(input_layer, tf.Tensor) or input_layer.ndim != 4:
-            raise TypeError(
-                "input_layer must be a tf.Tensor of shape (1, h, w, c)"
-            )
-        _, h, w, c = input_layer.shape
-        features = tf.reshape(input_layer, (h * w, c))
-        gram = tf.matmul(features, features, transpose_a=True)
-        return gram[tf.newaxis, :]
+            tf.Tensor: A tensor of shape (1, c, c) containing the gram matrix
+            of input_layer.
+        """
+        # Calidate input_layer rank and batch size
+        if (not isinstance(input_layer, (tf.Tensor, tf.Variable))
+                or len(input_layer.shape) != 4):
+            raise TypeError("input_layer must be a tensor of rank 4")
+
+        # Calculate the gram matrix using einsum for efficient computation
+        gram = tf.linalg.einsum('bijc,bijd->bcd', input_layer, input_layer)
+
+        # Normalization by the number of locations (h * w)
+        input_shape = tf.shape(input_layer)
+        nb_locations = tf.cast(input_shape[1] * input_shape[2], tf.float32)
+        
+        return gram / nb_locations
