@@ -71,28 +71,24 @@ class NST:
         is the same as the VGG19 input, and the output is a list containing
         the outputs of the VGG19 layers listed in style_layers followed by
         content_layer.
-
-        Returns:
-        model (tf.keras.Model): The Keras model used to calculate cost."""
-        # Load VGG19 model from Keras API
+        """
+        # Load the VGG19 model
         vgg = tf.keras.applications.VGG19(
-            include_top=False, weights='imagenet')
-
+            include_top=False,
+            weights='imagenet'
+        )
         vgg.trainable = False
-        # Replace MaxPooling2D layers with AveragePooling2D layers
-        for layer in vgg.layers:
-            if isinstance(layer, tf.keras.layers.MaxPooling2D):
-                layer.__class__ = tf.keras.layers.AveragePooling2D
 
-        # get outputs of the style and content layers from modified VGG19
-        style_outputs = [vgg.get_layer(
-            name).output for name in self.style_layers]
+        # Extract the outputs of the specified style and content layers
+        style_outputs = [vgg.get_layer(name).output
+                         for name in self.style_layers]
         content_output = vgg.get_layer(self.content_layer).output
 
-        # Create the model, make it non-trainable and return it
+        # Build the model that outputs the style and content features
         self.model = tf.keras.models.Model(
             inputs=vgg.input,
-            outputs=style_outputs + [content_output])
+            outputs=style_outputs + [content_output]
+        )
 
     @staticmethod
     def gram_matrix(input_layer):
@@ -139,16 +135,14 @@ class NST:
         preprocessed_content = tf.keras.applications.vgg19.preprocess_input(
             self.content_image * 255.0)
 
-        # Execute model forward pass and store raw outputs
+        # Inférence unique par image
         style_outputs_raw = self.model(preprocessed_style)
         content_outputs_raw = self.model(preprocessed_content)
 
-        # Correct slicing: Extract only the style layers (first 5 elements)
+        # Slicing propre sur les listes de tenseurs obtenues
         style_outputs = style_outputs_raw[:-1]
-
-        # Correct slicing: Extract only the content layer (last element)
         self.content_feature = content_outputs_raw[-1]
 
-        # Compute Gram matrices for each style layer output
+        # Calcul des matrices de Gram
         self.gram_style_features = [self.gram_matrix(output)
                                     for output in style_outputs]
