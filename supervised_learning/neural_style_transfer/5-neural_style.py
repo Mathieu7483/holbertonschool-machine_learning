@@ -238,20 +238,16 @@ class NST:
             the layer style outputs of the generated image
         Returns: the total style cost
         """
-        if (not isinstance(style_outputs, list)
-                or not all(isinstance(output, (tf.Tensor, tf.Variable))
-                           and len(output.shape) == 4
-                           for output in style_outputs)):
+        l_s = len(self.style_layers)
+
+        if not isinstance(style_outputs, list) or len(style_outputs) != l_s:
             raise TypeError(
-                "style_outputs must be a list of tensors of rank 4")
+                f"style_outputs must be a list with a length of {l_s}")
 
-        # Calculate the total style cost of individual layer costs
-        total_style_cost = 0
-        num_layers = len(self.style_layers)
+        # Calc. the style cost for each layer with even weights
+        style_cost = 0
+        weight = 1.0 / float(l_s)
+        for style_output, gram in zip(style_outputs, self.gram_style_features):
+            style_cost += weight * self.layer_style_cost(style_output, gram)
 
-        for i in range(num_layers):
-            layer_cost = self.layer_style_cost(
-                style_outputs[i], self.gram_style_features[i])
-            total_style_cost += layer_cost / num_layers
-
-        return total_style_cost
+        return style_cost
