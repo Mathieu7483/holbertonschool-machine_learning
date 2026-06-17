@@ -187,18 +187,6 @@ class NST:
 
         return tf.reduce_mean(tf.square(content_output - self.content_feature))
 
-    @staticmethod
-    def variational_cost(generated_image):
-        """
-        Calculates the variational cost for the generated image.
-        """
-        w_variance = tf.square(generated_image[:, :, 1:, :] -
-                               generated_image[:, :, :-1, :])
-        h_variance = tf.square(generated_image[:, 1:, :, :] -
-                               generated_image[:, :-1, :, :])
-
-        return tf.reduce_sum(w_variance) + tf.reduce_sum(h_variance)
-
     def total_cost(self, generated_image):
         """
         Calculates the total cost for the generated image
@@ -294,3 +282,15 @@ class NST:
                 generated_image.assign(clipped)
 
         return best_image, best_cost
+
+    @staticmethod
+    def variational_cost(generated_image):
+        """
+        Calcule le coût variationnel pour l'image générée.
+        Acts as a regularizer to smooth pixel variations (denoising).
+        """
+        if not isinstance(generated_image, (tf.Tensor, tf.Variable)) or \
+           len(generated_image.shape) not in [3, 4]:
+            raise TypeError("image must be a tensor of rank 3 or 4")
+
+        return tf.reduce_sum(tf.image.total_variation(generated_image))
