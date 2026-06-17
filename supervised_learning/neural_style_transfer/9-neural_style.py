@@ -100,10 +100,11 @@ class NST:
             new_h = 512
             new_w = int((w * 512) / h)
 
-        # Cast to float32 BEFORE dividing to avoid float64 precision issues
-        image_normalized = tf.cast(image, tf.float32) / 255.0
+        image_cast = tf.cast(image, tf.float32)
+        if np.max(image) > 1:
+            image_cast = image_cast / 255.0
 
-        image_expanded = tf.expand_dims(image_normalized, axis=0)
+        image_expanded = tf.expand_dims(image_cast, axis=0)
 
         image_resized = tf.image.resize(
             image_expanded,
