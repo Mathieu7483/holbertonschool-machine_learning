@@ -327,20 +327,21 @@ class NST:
 
         return gradients, J_total, J_content, J_style
 
-    def generate_image(self, iterations=1000, step=None, lr=0.01,
-                       beta1=0.9, beta2=0.99):
+    def generate_image(self, iterations=1000, step=None, lr=0.01, beta1=0.9,
+                       beta2=0.99):
         """
-        Generates the neural style transferred image using Adam optimization.
+        Generates the neural style transferred image.
+
         Parameters:
-        - iterations (int): number of iterations to perform gradient descent
-        - step (int): if not None, step at which to print training info,
-            including the final iteration
-        - lr (float or int): learning rate for gradient descent
-        - beta1 (float): beta1 parameter for Adam optimizer
-        - beta2 (float): beta2 parameter for Adam optimizer
+        - iterations: Number of iterations to perform gradient descent.
+        - step: Step at which to print information about the training.
+        - lr: Learning rate for gradient descent.
+        - beta1: Beta1 parameter for Adam optimization.
+        - beta2: Beta2 parameter for Adam optimization.
+
         Returns:
-        - generated_image: the best generated image as a numpy.ndarray
-        - cost: the best cost achieved
+        - generated_image: The best generated image.
+        - cost: The best cost.
         """
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
@@ -365,35 +366,30 @@ class NST:
         if not (0 <= beta2 <= 1):
             raise ValueError("beta2 must be in the range [0, 1]")
 
-        generated_image = tf.Variable(self.content_image, dtype=tf.float32)
+        generated_image = tf.Variable(self.content_image,
+                                      dtype=tf.float32)
 
-        optimizer = tf.keras.optimizers.Adam(
-            learning_rate=lr,
-            beta_1=beta1,
-            beta_2=beta2
-        )
+        optimizer = tf.optimizers.Adam(learning_rate=lr, beta_1=beta1,
+                                       beta_2=beta2)
 
         best_cost = float('inf')
         best_image = None
 
-        for i in range(iterations + 1):
-            grads, J_total, J_content, J_style = self.compute_grads(
-                generated_image
-            )
-            if step is not None and (i % step == 0 or i == iterations):
-                print("Cost at iteration {}: {}, content {}, style {}".format(
-                    i, J_total, J_content, J_style))
-            if i == iterations:
-                break
+        for i in range(iterations):
+            with tf.GradientTape() as tape:
+                J_total, J_content, J_style = self.total_cost(generated_image)
 
+            grads = tape.gradient(J_total, generated_image)
             optimizer.apply_gradients([(grads, generated_image)])
-
             clipped = tf.clip_by_value(generated_image, 0.0, 1.0)
             generated_image.assign(clipped)
 
-            current_cost = J_total.numpy()
-            if current_cost < best_cost:
-                best_cost = current_cost
+            if J_total < best_cost:
+                best_cost = J_total
                 best_image = generated_image.numpy()
+
+            if step is not None and (i + 1) % step == 0:
+                print("Cost at iteration {}: {}, content {}, style {}".format(
+                    i + 1, J_total, J_content, J_style))
 
         return best_image[0], best_cost
