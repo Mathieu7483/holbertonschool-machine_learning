@@ -193,13 +193,11 @@ class NST:
         Calculates the variational cost for the generated image.
         Uses the sum of squared differences for anisotropic total variation.
         """
-        # Convertit l'entrée en tenseur pour accepter les variables et types dérivés
-        generated_image = tf.convert_to_tensor(generated_image)
-
-        if len(generated_image.shape) != 4:
+        if (not isinstance(generated_image, (tf.Tensor, tf.Variable))
+                or not hasattr(generated_image, 'shape')
+                or len(generated_image.shape) != 4):
             raise TypeError("generated_image must be a tensor of rank 4")
 
-        # Différences horizontales et verticales sur les axes de l'image
         w_variance = tf.square(generated_image[:, :, 1:, :] -
                                generated_image[:, :, :-1, :])
         h_variance = tf.square(generated_image[:, 1:, :, :] -
@@ -227,7 +225,6 @@ class NST:
         J_style = self.style_cost(style_outputs)
         J_var = self.variational_cost(generated_image)
 
-        # Calcul du coût global incluant le poids variationnel
         J = self.alpha * J_content + self.beta * J_style + self.var * J_var
         return J, J_content, J_style, J_var
 
