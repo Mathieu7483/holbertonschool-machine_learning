@@ -17,6 +17,7 @@ class NST:
     - content_layer: The layer to be used for content extraction,
     defaulting to 'block5_conv2'.
     """
+
     style_layers = ['block1_conv1', 'block2_conv1',
                     'block3_conv1', 'block4_conv1', 'block5_conv1']
     content_layer = 'block5_conv2'
@@ -99,7 +100,8 @@ class NST:
             new_h = 512
             new_w = int((w * 512) / h)
 
-        image_normalized = image / 255.0
+        # Cast to float32 BEFORE dividing to avoid float64 precision issues
+        image_normalized = tf.cast(image, tf.float32) / 255.0
 
         image_expanded = tf.expand_dims(image_normalized, axis=0)
 
@@ -118,7 +120,6 @@ class NST:
         Load the VGG19 model with AveragePooling2D layers instead of
         MaxPooling2D layers.
         """
-        # get VGG19 from Keras API
         modelVGG19 = tf.keras.applications.VGG19(
             include_top=False,
             weights='imagenet'
@@ -126,16 +127,13 @@ class NST:
 
         modelVGG19.trainable = False
 
-        # Selected layers
         selected_layers = self.style_layers + [self.content_layer]
 
         outputs = [modelVGG19.get_layer(name).output for name
                    in selected_layers]
 
-        # Construct model
         model = tf.keras.Model([modelVGG19.input], outputs)
 
-        # replace MaxPooling layers by AveragePooling layers
         custom_objects = {'MaxPooling2D': tf.keras.layers.AveragePooling2D}
         tf.keras.models.save_model(model, 'vgg_base.h5')
         model_avg = tf.keras.models.load_model('vgg_base.h5',
@@ -155,16 +153,13 @@ class NST:
         - A tf.Tensor of shape (1, c, c) containing the Gram matrix of
             input_layer.
         """
-        # Calidate input_layer rank and batch size
         if (not isinstance(input_layer, (tf.Tensor, tf.Variable))
                 or len(input_layer.shape) != 4
                 or input_layer.shape[0] != 1):
             raise TypeError("input_layer must be a tensor of rank 4")
 
-        # calculate gram matrix: (batch, height, width, channel)
         gram = tf.linalg.einsum('bijc,bijd->bcd', input_layer, input_layer)
 
-        # Normalize by number of locations (h * w) then return gram tensor
         input_shape = tf.shape(input_layer)
         nb_locations = tf.cast(input_shape[1] * input_shape[2], tf.float32)
         return gram / nb_locations
@@ -177,19 +172,15 @@ class NST:
                 style layer outputs of the style image
             - content_feature - the content layer output of the content image
         """
-        # Ensure the images are preprocessed correctly
         preprocessed_style = tf.keras.applications.vgg19.preprocess_input(
             self.style_image * 255)
         preprocessed_content = tf.keras.applications.vgg19.preprocess_input(
             self.content_image * 255)
 
-        # Get the outputs from the model with preprocessed images as input
         style_outputs = self.model(preprocessed_style)[:-1]
 
-        # Set content_feature, no further processing required
         self.content_feature = self.model(preprocessed_content)[-1]
 
-        # Compute and set Gram matrices for the style layers outputs
         self.gram_style_features = [self.gram_matrix(
             output) for output in style_outputs]
 
@@ -215,10 +206,8 @@ class NST:
             raise TypeError(
                 f"gram_target must be a tensor of shape [1, {c}, {c}]")
 
-        # Calculate the Gram matrix of style_output
         gram_style_output = self.gram_matrix(style_output)
 
-        # Return squared mean of the difference between the two Gram matrices
         return tf.reduce_mean(tf.square(gram_style_output - gram_target))
 
     def style_cost(self, style_outputs):
@@ -236,7 +225,6 @@ class NST:
             raise TypeError(
                 f"style_outputs must be a list with a length of {l_s}")
 
-        # Calc. the style cost for each layer with even weights
         style_cost = 0
         weight = 1.0 / float(l_s)
         for style_output, gram in zip(style_outputs, self.gram_style_features):
@@ -277,13 +265,11 @@ class NST:
                 or s != generated_image.shape):
             raise TypeError(f"generated_image must be a tensor of shape {s}")
 
-        # Preprocess the generated image
         preprocessed_img = tf.keras.applications.vgg19.preprocess_input(
             generated_image * 255.0)
 
-        # Get model outputs of style and content layers for the generated image
         outputs = self.model(preprocessed_img)
-        style_outputs = outputs[:-1]
+        style_outputs = list(outputs[:-1])
         content_output = outputs[-1]
 
         J_content = self.content_cost(content_output)
@@ -307,13 +293,10 @@ class NST:
                 or s != generated_image.shape):
             raise TypeError(f"generated_image must be a tensor of shape {s}")
 
-        # Use GradientTape to record operations and easy differentiation
         with tf.GradientTape() as tape:
-            # tracking generated_image tensor for gradient calculation
             tape.watch(generated_image)
             J_total, J_content, J_style = self.total_cost(generated_image)
 
-        # Compute gradient of J_total with respect to generated_image
         gradients = tape.gradient(J_total, generated_image)
 
         return gradients, J_total, J_content, J_style
@@ -360,7 +343,7 @@ class NST:
 
         generated_image = tf.Variable(self.content_image, dtype=tf.float32)
 
-        optimizer = tf.optimizers.Adam(
+        optimizer = tf.keras.optimizers.Adam(
             learning_rate=lr,
             beta_1=beta1,
             beta_2=beta2
@@ -370,24 +353,20 @@ class NST:
         best_image = None
 
         for i in range(iterations):
-            # Use compute_grads to get gradients and costs
             grads, J_total, J_content, J_style = self.compute_grads(
                 generated_image
             )
 
-            # Application of gradients to update the generated image
             optimizer.apply_gradients([(grads, generated_image)])
 
-            # Clip the generated image to ensure pixel values are in [0, 1]
             clipped = tf.clip_by_value(generated_image, 0.0, 1.0)
             generated_image.assign(clipped)
 
-            # Update best cost and image if current cost is lower
-            if J_total < best_cost:
-                best_cost = J_total
+            current_cost = J_total.numpy()
+            if current_cost < best_cost:
+                best_cost = current_cost
                 best_image = clipped.numpy()
 
-            # Print cost information at specified steps
             if step is not None:
                 if i % step == 0 or i == iterations - 1:
                     print("Cost at iteration {}: {}, content {}, style {}"
