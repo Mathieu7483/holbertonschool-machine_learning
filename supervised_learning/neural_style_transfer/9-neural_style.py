@@ -99,19 +99,17 @@ class NST:
             new_h = 512
             new_w = int((w * 512) / h)
 
-        # Ajout de la dimension de batch avant le redimensionnement
-        image_expanded = tf.expand_dims(image, axis=0)
+        image_normalized = image / 255.0
 
-        # Redimensionnement au format float32 natif de TensorFlow
+        image_expanded = tf.expand_dims(image_normalized, axis=0)
+
         image_resized = tf.image.resize(
             image_expanded,
             size=[new_h, new_w],
             method=tf.image.ResizeMethod.BICUBIC
         )
 
-        # Normalisation et écrêtage strict pour éliminer les résidus de l'interpolation
-        image_normalized = image_resized / 255.0
-        image_clipped = tf.clip_by_value(image_normalized, 0.0, 1.0)
+        image_clipped = tf.clip_by_value(image_resized, 0.0, 1.0)
 
         return image_clipped
 
@@ -340,7 +338,6 @@ class NST:
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be positive")
-        
         if step is not None:
             if not isinstance(step, int):
                 raise TypeError("step must be an integer")
@@ -348,17 +345,14 @@ class NST:
                 raise ValueError(
                     "step must be positive and less than iterations"
                 )
-                
         if not isinstance(lr, (float, int)):
             raise TypeError("lr must be a number")
         if lr <= 0:
             raise ValueError("lr must be positive")
-            
         if not isinstance(beta1, float):
             raise TypeError("beta1 must be a float")
         if not (0 <= beta1 <= 1):
             raise ValueError("beta1 must be in the range [0, 1]")
-            
         if not isinstance(beta2, float):
             raise TypeError("beta2 must be a float")
         if not (0 <= beta2 <= 1):
@@ -400,4 +394,3 @@ class NST:
                           .format(i, J_total, J_content, J_style))
 
         return best_image[0], best_cost
-  
