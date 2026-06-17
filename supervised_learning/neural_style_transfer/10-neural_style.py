@@ -191,13 +191,7 @@ class NST:
     def variational_cost(generated_image):
         """
         Calculates the variational cost for the generated image.
-        Uses the sum of squared differences for anisotropic total variation.
         """
-        if (not isinstance(generated_image, (tf.Tensor, tf.Variable))
-                or not hasattr(generated_image, 'shape')
-                or len(generated_image.shape) != 4):
-            raise TypeError("generated_image must be a tensor of rank 4")
-
         w_variance = tf.square(generated_image[:, :, 1:, :] -
                                generated_image[:, :, :-1, :])
         h_variance = tf.square(generated_image[:, 1:, :, :] -
