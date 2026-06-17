@@ -193,8 +193,10 @@ class NST:
         Calculates the variational cost for the generated image.
         Uses the sum of squared differences for anisotropic total variation.
         """
-        if (not isinstance(generated_image, (tf.Tensor, tf.Variable))
-                or len(generated_image.shape) != 4):
+        # Convertit l'entrée en tenseur pour accepter les variables et types dérivés
+        generated_image = tf.convert_to_tensor(generated_image)
+
+        if len(generated_image.shape) != 4:
             raise TypeError("generated_image must be a tensor of rank 4")
 
         # Différences horizontales et verticales sur les axes de l'image
