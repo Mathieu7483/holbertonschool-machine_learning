@@ -80,22 +80,13 @@ class NST:
         and its largest side is 512 pixels.
 
         Parameters:
-        - image (numpy.ndarray): A numpy.ndarray of shape (h, w, 3) containing
-        the image to be scaled.
-
-        Raises:
-        - TypeError: If image is not a numpy.ndarray with shape (h, w, 3),
-          raises an error with the message "image must be a numpy.ndarray
-          with shape (h, w, 3)".
+        - image (numpy.ndarray): A numpy.ndarray of shape (h, w, 3)
 
         Returns:
         - tf.Tensor: The scaled image as a tf.Tensor with shape
-          (1, h_new, w_new, 3), where max(h_new, w_new) == 512 and
-          min(h_new, w_new) is scaled proportionately.
-          The image is resized using bicubic interpolation, and its pixel
-          values are rescaled from the range [0, 255] to [0, 1].
+          (1, h_new, w_new, 3) rescaled using bicubic interpolation.
         """
-        if (not isinstance(image, np.ndarray) or image.shape[-1] != 3):
+        if not isinstance(image, np.ndarray) or image.shape[-1] != 3:
             raise TypeError(
                 "image must be a numpy.ndarray with shape (h, w, 3)")
 
@@ -108,19 +99,21 @@ class NST:
             new_h = 512
             new_w = int((w * 512) / h)
 
-        # Resize image (with bicubic interpolation)
+        # Ajout de la dimension de batch avant le redimensionnement
+        image_expanded = tf.expand_dims(image, axis=0)
+
+        # Redimensionnement au format float32 natif de TensorFlow
         image_resized = tf.image.resize(
-            image, size=[new_h, new_w],
-            method=tf.image.ResizeMethod.BICUBIC)
+            image_expanded,
+            size=[new_h, new_w],
+            method=tf.image.ResizeMethod.BICUBIC
+        )
 
-        # Normalize pixel values to the range [0, 1]
-        image_normalized = image_resized / 255
+        # Normalisation et écrêtage strict pour éliminer les résidus de l'interpolation
+        image_normalized = image_resized / 255.0
+        image_clipped = tf.clip_by_value(image_normalized, 0.0, 1.0)
 
-        # Clip values to ensure they are within [0, 1] range
-        image_clipped = tf.clip_by_value(image_normalized, 0, 1)
-
-        # Add batch dimension on axis 0 and return
-        return tf.expand_dims(image_clipped, axis=0)
+        return image_clipped
 
     def load_model(self):
         """
