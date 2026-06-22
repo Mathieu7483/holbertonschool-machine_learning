@@ -28,3 +28,13 @@ class Binomial:
 
             self.n = n_est
             self.p = p_est
+
+    def pmf(self, k):
+        """Calculates the value of the PMF for a given number of successes k"""
+        if not isinstance(k, int):
+            k = int(k)
+        if k < 0 or k > self.n:
+            return 0
+
+        from math import comb
+        return comb(self.n, k) * (self.p ** k) * ((1 - self.p) ** (self.n - k))
