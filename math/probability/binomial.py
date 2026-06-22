@@ -67,3 +67,24 @@ class Binomial:
 
         nck = n_fact / (k_fact * n_k_fact)
         return nck * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of “successes”.
+
+        Parameters:
+        k (int): The number of “successes”.
+
+        Returns:
+        float: The CDF value for k.
+        If k is out of range (k < 0), returns 0.
+        If k is out of range (k > n), returns 1.
+        """
+        k = int(k)
+        if k < 0:
+            return 0
+        if k > self.n:
+            return 1
+
+        cdf_value = sum(self.pmf(i) for i in range(k + 1))
+        return cdf_value
