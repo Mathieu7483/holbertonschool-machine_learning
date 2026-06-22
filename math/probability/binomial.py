@@ -10,7 +10,7 @@ class Binomial:
         if data is None:
             if n <= 0:
                 raise ValueError("n must be a positive value")
-            if p <= 0 or p >= 1:
+            if not (0 < p < 1):
                 raise ValueError("p must be greater than 0 and less than 1")
             self.n = int(n)
             self.p = float(p)
@@ -19,5 +19,12 @@ class Binomial:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            self.n = len(data)
-            self.p = sum(data) / (self.n * max(data))
+
+            mean = sum(data) / len(data)
+            variance = sum((x - mean) ** 2 for x in data) / len(data)
+            p_est = 1 - (variance / mean)
+            n_est = round(mean / p_est)
+            p_est = mean / n_est
+
+            self.n = n_est
+            self.p = p_est
