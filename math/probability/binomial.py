@@ -29,12 +29,41 @@ class Binomial:
             self.n = n_est
             self.p = p_est
 
+    def _factorial(self, n):
+        """
+        Calculates the factorial of a given number `n`.
+
+        Parameters:
+        n (int): The number to calculate the factorial of.
+
+        Returns:
+        int: The factorial of n.
+        """
+        if n == 0:
+            return 1
+        result = 1
+        for i in range(1, n + 1):
+            result *= i
+        return result
+
     def pmf(self, k):
-        """Calculates the value of the PMF for a given number of successes k"""
-        if not isinstance(k, int):
-            k = int(k)
+        """
+        Calculates the value of the PMF for a given number of “successes”.
+
+        Parameters:
+        k (int): The number of “successes”.
+
+        Returns:
+        float: The PMF value for k.
+        If k is out of range (k < 0 or k > n), returns 0.
+        """
+        k = int(k)
         if k < 0 or k > self.n:
             return 0
 
-        from math import comb
-        return comb(self.n, k) * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+        n_fact = self._factorial(self.n)
+        k_fact = self._factorial(k)
+        n_k_fact = self._factorial(self.n - k)
+
+        nck = n_fact / (k_fact * n_k_fact)
+        return nck * (self.p ** k) * ((1 - self.p) ** (self.n - k))
