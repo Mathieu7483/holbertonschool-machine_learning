@@ -1,4 +1,4 @@
-#!/user/bin/env python3
+#!/usr/bin/env python3
 """Create a class Poisson that represents a poisson distribution"""
 
 
