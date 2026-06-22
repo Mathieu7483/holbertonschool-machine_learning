@@ -9,8 +9,10 @@ class Poisson:
         """Initializes the Poisson distribution
 
         Args:
-            data (list): list of the data to be used to estimate the distribution
-            lambtha (float): expected number of occurences in a given time frame
+            data (list): list of the data to be used to estimate
+            the distribution
+            lambtha (float): expected number of occurences in a
+            given time frame
         """
         if data is None:
             if lambtha <= 0:
