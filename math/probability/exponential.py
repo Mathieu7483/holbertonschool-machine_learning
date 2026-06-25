@@ -5,6 +5,8 @@ an exponential distribution"""
 
 class Exponential:
     """Represents an exponential distribution"""
+    e = 2.7182818285  # Approximation of Euler's number
+    pi = 3.1415926536  # Approximation of Pi
     def __init__(self, data=None, lambtha=1.):
         """Initializes the Exponential distribution"""
         if data is None:
@@ -22,10 +24,10 @@ class Exponential:
         """Calculates the value of the PDF for a given time period"""
         if x < 0:
             return 0
-        return self.lambtha * (2.7182818285 ** (-self.lambtha * x))
+        return self.lambtha * (e ** (-self.lambtha * x))
 
     def cdf(self, x):
         """Calculates the value of the CDF for a given time period"""
         if x < 0:
             return 0
-        return 1 - (2.7182818285 ** (-self.lambtha * x))
+        return 1 - (e ** (-self.lambtha * x))
