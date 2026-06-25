@@ -4,6 +4,8 @@
 
 class Binomial:
     """Represents a binomial distribution"""
+    e = 2.7182818285  # Approximation of Euler's number
+    pi = 3.1415926536  # Approximation of Pi
 
     def __init__(self, data=None, n=1, p=0.5):
         """Initializes the Binomial distribution"""
