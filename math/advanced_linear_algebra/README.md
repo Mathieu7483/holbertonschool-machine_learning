@@ -1,5 +1,5 @@
 <p align="center"\>
-<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/math/probability/a-realistic--cinematic-photograph-of-a-data-scient.png"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/math/advanced_linear_algebra/a-realistic--cinematic-photograph-of-a-high-tech-m.png"\>
 </p>
 
 ---
