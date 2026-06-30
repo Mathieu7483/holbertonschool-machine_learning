@@ -15,9 +15,6 @@ def inverse(matrix):
     if not all(len(row) == len(matrix) for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    if len(matrix) == 1:
-        return [[1 / matrix[0][0]]]
-
     def determinant(sub_mat):
         """Calculates the determinant of a matrix"""
         if len(sub_mat) == 1:
@@ -32,20 +29,22 @@ def inverse(matrix):
             det += ((-1) ** i) * sub_mat[0][i] * determinant(minor_sub_matrix)
         return det
 
+    det = determinant(matrix)
+    if det == 0:
+        return None
+
+    if len(matrix) == 1:
+        return [[1 / matrix[0][0]]]
+
     n = len(matrix)
-    cofactor_matrix = [[0 for _ in range(n)] for _ in range(n)]
+    inverse_matrix = [[0 for _ in range(n)] for _ in range(n)]
 
     for i in range(n):
         for j in range(n):
             minor_mat = [[matrix[x][y] for y in range(n) if y != j]
                          for x in range(n) if x != i]
-            cofactor_matrix[i][j] = ((-1) ** (i + j)) * determinant(minor_mat)
 
-    det = determinant(matrix)
-    if det == 0:
-        raise ValueError("matrix is singular and cannot be inverted")
-
-    inverse_matrix = [[cofactor_matrix[j][i] / det for j in range(n)]
-                      for i in range(n)]
+            cofactor = ((-1) ** (i + j)) * determinant(minor_mat)
+            inverse_matrix[j][i] = cofactor / det
 
     return inverse_matrix
