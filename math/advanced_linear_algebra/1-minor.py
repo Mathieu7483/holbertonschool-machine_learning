@@ -12,6 +12,8 @@ def minor(matrix):
         raise ValueError("matrix must be a non-empty square matrix")
     if len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a non-empty square matrix")
+    if len(matrix) == 1:
+        return [[1]]
 
     def determinant(sub_mat):
         """Calculates the determinant of a matrix"""
