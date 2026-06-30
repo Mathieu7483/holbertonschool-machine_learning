@@ -22,4 +22,3 @@ def determinant(matrix):
         sub_matrix = [row[:i] + row[i+1:] for row in matrix[1:]]
         det += ((-1) ** i) * matrix[0][i] * determinant(sub_matrix)
     return det
-
