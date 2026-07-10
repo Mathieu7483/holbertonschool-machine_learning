@@ -16,10 +16,9 @@ Ce dépôt rassemble les projets, architectures et modèles développés tout au
 * **Data Processing :** Manipulation, nettoyage et analyse exploratoire de données (EDA).
 * **Modélisation :** Implémentation d'algorithmes de Deep Learning et de Machine Learning (Supervisé / Non supervisé).
 * **Ingénierie Logicielle appliquée :** Conception de pipelines de données propres, modulaires et orientés objet.
+"L'objectif n'est pas seulement d'utiliser des bibliothèques existantes, mais de comprendre la mécanique mathématique sous-jacente pour concevoir des solutions robustes et optimisées."
 
-> "L'objectif n'est pas seulement d'utiliser des bibliothèques existantes, mais de comprendre la mécanique mathématique sous-jacente pour concevoir des solutions robustes et optimisées."
->
-> ### 🛠️ Compétences & Technologies
+### 🛠️ Compétences & Technologies
 
 * **Mathématiques pour le ML :** Algèbre linéaire, calcul différentiel, probabilités et statistiques.
 * **Data Processing & Analyse :** Manipulation, nettoyage et analyse exploratoire de données (EDA) avec **NumPy** et **Pandas**.
