@@ -83,10 +83,11 @@ def intersection(x, n, P, Pr):
 
     return intersection
 
+
 def marginal(x, n, P, Pr):
     """
-    Calculates the marginal probability of obtaining data with various hypothetical
-    probabilities and prior beliefs.
+    Calculates the marginal probability of obtaining data with various
+    hypothetical probabilities and prior beliefs.
 
     Parameters:
     - x (int): Number of patients that develop severe side effects.
