@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Based on marginal.py write a function
 that calculates the posterior probability that the probability
-of developing severe side effects falls within a 
+of developing severe side effects falls within a
 specific range given the data"""
 from scipy import special
 
