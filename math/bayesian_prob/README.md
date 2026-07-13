@@ -1,4 +1,6 @@
-
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/math/bayesian_prob/a-realistic--cinematic-photograph-of-a-deep-learni.png"\>
+</p>
 
 # Mathematics — Bayesian Probability
 
