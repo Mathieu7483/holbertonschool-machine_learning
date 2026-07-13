@@ -65,5 +65,5 @@ chmod +x 0-main.py
 
 ## ✍️ Auteur
 
-* **Mathieu** - *Étudiant en apprentissage Machine Learning (42 ans)* - [GitHub Profile](https://www.google.com/search?q=https://github.com/Mathieu7483)
+  * **Mathieu** - *Programming student, specialization Machine Learning* - [👤 My Github profile](https://github.com/Mathieu7483)
 
