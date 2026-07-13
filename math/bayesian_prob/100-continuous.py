@@ -4,7 +4,7 @@ that calculates the posterior probability that the probability
 of developing severe side effects falls within a 
 specific range given the data"""
 import numpy as np
-from scipy import special as sp
+from scipy import special
 
 def likelihood(x, n, P):
     """
