@@ -1,3 +1,7 @@
+<p align="center"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/math/multivariate_prob/a-realistic--cinematic-photograph-of-a-high-tech-m.png"\>
+</p>
+
 # Mathematics — Multivariate Probability
 
 ## 📊 Description
