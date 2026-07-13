@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+"""Based on marginal.py write a function
+that calculates the posterior probability that the probability
+of developing severe side effects falls within a 
+specific range given the data"""
+import numpy as np
+from scipy import special as sp
+
+def likelihood(x, n, P):
+    """
+    Calculates the likelihood of obtaining data given various hypothetical
+    probabilities.
+
+    Parameters:
+    - x (int): Number of patients that develop severe side effects.
+    - n (int): Total number of patients observed.
+    - P (numpy.ndarray): 1D array containing the various hypothetical
+    probabilities.
+
+    Returns:
+    - numpy.ndarray: 1D array containing the likelihoods for each probability
+    in P.
+    """
+    if not isinstance(n, int) or n <= 0:
+        raise ValueError("n must be a positive integer")
+    if not isinstance(x, int) or x < 0:
+        raise ValueError(
+            "x must be an integer that is greater than or equal to 0")
+    if x > n:
+        raise ValueError("x cannot be greater than n")
+    if not isinstance(P, np.ndarray) or P.ndim != 1:
+        raise TypeError("P must be a 1D numpy.ndarray")
+    if np.any((P < 0) | (P > 1)):
+        raise ValueError("All values in P must be in the range [0, 1]")
+
+    # Calculate the binomial coefficient
+    binom_coeff = (np.math.factorial(n) /
+                   (np.math.factorial(x) * np.math.factorial(n - x)))
+
+    # Calculate the likelihood for each probability in P
+    likelihoods = binom_coeff * (P ** x) * ((1 - P) ** (n - x))
+
+    return likelihoods
+
+
+def intersection(x, n, P, Pr):
+    """
+    Calculates the intersection of obtaining data with various hypothetical
+    probabilities and prior beliefs.
+
+    Parameters:
+    - x (int): Number of patients that develop severe side effects.
+    - n (int): Total number of patients observed.
+    - P (numpy.ndarray): 1D array containing the various hypothetical
+    probabilities of developing severe side effects.
+    - Pr (numpy.ndarray): 1D array containing the prior beliefs of P.
+
+    Returns:
+    - numpy.ndarray: 1D array containing the intersections for each
+    probability in P.
+    """
+    if not isinstance(n, int) or n <= 0:
+        raise ValueError("n must be a positive integer")
+    if not isinstance(x, int) or x < 0:
+        raise ValueError(
+            "x must be an integer that is greater than or equal to 0")
+    if x > n:
+        raise ValueError("x cannot be greater than n")
+    if not isinstance(P, np.ndarray) or P.ndim != 1:
+        raise TypeError("P must be a 1D numpy.ndarray")
+    if not isinstance(Pr, np.ndarray) or Pr.shape != P.shape:
+        raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
+    if np.any((P < 0) | (P > 1)):
+        raise ValueError("All values in P must be in the range [0, 1]")
+    if np.any((Pr < 0) | (Pr > 1)):
+        raise ValueError("All values in Pr must be in the range [0, 1]")
+    if not np.isclose(np.sum(Pr), 1):
+        raise ValueError("Pr must sum to 1")
+
+    # Calculate the likelihood of the data for each probability in P
+    L = likelihood(x, n, P)
+
+    # Calculate the intersection for each probability in P
+    intersection = L * Pr
+
+    return intersection
+
+
+def marginal(x, n, P, Pr):
+    """
+    Calculates the marginal probability of obtaining data with various
+    hypothetical probabilities and prior beliefs.
+
+    Parameters:
+    - x (int): Number of patients that develop severe side effects.
+    - n (int): Total number of patients observed.
+    - P (numpy.ndarray): 1D array containing the various hypothetical
+    probabilities of developing severe side effects.
+    - Pr (numpy.ndarray): 1D array containing the prior beliefs of P.
+
+    Returns:
+    - float: The marginal probability of obtaining the data.
+    """
+    if not isinstance(n, int) or n <= 0:
+        raise ValueError("n must be a positive integer")
+    if not isinstance(x, int) or x < 0:
+        raise ValueError(
+            "x must be an integer that is greater than or equal to 0")
+    if x > n:
+        raise ValueError("x cannot be greater than n")
+    if not isinstance(P, np.ndarray) or P.ndim != 1:
+        raise TypeError("P must be a 1D numpy.ndarray")
+    if not isinstance(Pr, np.ndarray) or Pr.shape != P.shape:
+        raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
+    if np.any((P < 0) | (P > 1)):
+        raise ValueError("All values in P must be in the range [0, 1]")
+    if np.any((Pr < 0) | (Pr > 1)):
+        raise ValueError("All values in Pr must be in the range [0, 1]")
+    if not np.isclose(np.sum(Pr), 1):
+        raise ValueError("Pr must sum to 1")
+
+    # Calculate the intersection for each probability in P
+    intersection_values = intersection(x, n, P, Pr)
+
+    # Calculate the marginal probability by summing the intersections
+    marginal_probability = np.sum(intersection_values)
+
+    return marginal_probability
+
+
+def posterior(x, n, p1, p2):
+    """
+    Calculates the posterior probability that the probability of developing
+    severe side effects falls within a specific range given the data.
+
+    Parameters:
+    - x (int): Number of patients that develop severe side effects.
+    - n (int): Total number of patients observed.
+    - p1 (float): Lower bound on the range.
+    - p2 (float): Upper bound on the range.
+
+    Returns:
+    - float: The posterior probability that p is within the range [p1, p2]
+    given x and n.
+    """
+    if not isinstance(n, int) or n <= 0:
+        raise ValueError("n must be a positive integer")
+    if not isinstance(x, int) or x < 0:
+        raise ValueError(
+            "x must be an integer that is greater than or equal to 0")
+    if x > n:
+        raise ValueError("x cannot be greater than n")
+    if not isinstance(p1, float) or not (0 <= p1 <= 1):
+        raise ValueError("p1 must be a float in the range [0, 1]")
+    if not isinstance(p2, float) or not (0 <= p2 <= 1):
+        raise ValueError("p2 must be a float in the range [0, 1]")
+    if p2 <= p1:
+        raise ValueError("p2 must be greater than p1")
+
+    # Parameters for the Beta distribution
+    alpha = x + 1
+    beta = n - x + 1
+
+    # Calculate the CDF of the Beta distribution at p1 and p2
+    # Use the regularized incomplete beta function for the Beta CDF
+    cdf_p1 = sp.betainc(alpha, beta, p1)
+    cdf_p2 = sp.betainc(alpha, beta, p2)
+
+    # The posterior probability is the difference between the CDF values
+    posterior_prob = cdf_p2 - cdf_p1
+
+    return posterior_prob
