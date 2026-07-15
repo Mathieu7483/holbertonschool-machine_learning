@@ -4,40 +4,27 @@ import numpy as np
 
 
 def pca(X, var=0.95):
-    """performs PCA on a dataset
+    """
+    Performs PCA on a dataset.
 
     Args:
-        X: numpy.ndarray of shape (n, d) containing the dataset
-            n: number of data points
-            d: number of dimensions in each point
-        var: float, the fraction of variance that the PCA
-         ptransformation should maintain
+        X (numpy.ndarray): Dataset of shape (n, d) where n is the number of
+        data points and d is the number of dimensions in each point.
+        var (float): Fraction of the variance that the PCA transformation
+        should maintain.
 
     Returns:
-        W: numpy.ndarray of shape (d, nd) containing the eigenvectors
-            nd: new dimensionality of the transformed X
+        numpy.ndarray: Weights matrix W of shape (d, nd) where nd is the
+        new dimensionality of the transformed X.
     """
-    # Calculate the covariance matrix
-    cov_matrix = np.cov(X, rowvar=False)
+    # Compute the SVD of the data matrix
+    U, S, Vt = np.linalg.svd(X, full_matrices=False)
 
-    # Perform eigen decomposition
-    eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+    # Compute the total variance explained by the singular values
+    cum_variance = np.cumsum(S ** 2) / np.sum(S ** 2)
 
-    # Sort eigenvalues and corresponding eigenvectors in descending order
-    sorted_indices = np.argsort(eigenvalues)[::-1]
-    sorted_eigenvalues = eigenvalues[sorted_indices]
-    sorted_eigenvectors = eigenvectors[:, sorted_indices]
+    # Determine the number of components to keep (indexing starts at 0)
+    num_components = np.argmax(cum_variance >= var) + 1
 
-    # Calculate the cumulative variance ratio
-    cumulative_variance_ratio = (
-        np.cumsum(sorted_eigenvalues) / np.sum(sorted_eigenvalues)
-    )
-
-    # Determine the number of components to retain
-    # based on the desired variance
-    num_components = np.searchsorted(cumulative_variance_ratio, var) + 1
-
-    # Select the top 'num_components' eigenvectors
-    W = sorted_eigenvectors[:, :num_components]
-
-    return W
+    # Transposed (for shape(d, nd)) top "num_components + 1" rows of Vt
+    return Vt[:num_components + 1].T
