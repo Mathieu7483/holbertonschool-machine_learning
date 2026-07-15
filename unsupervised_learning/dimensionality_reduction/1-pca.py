@@ -5,19 +5,26 @@ import numpy as np
 
 def pca(X, ndim):
     """
-    Performs PCA on a dataset.
+    Performs PCA on a dataset to reduce it to a specified number of dimensions.
 
     Args:
         X (numpy.ndarray): Dataset of shape (n, d) where n is the number of
         data points and d is the number of dimensions in each point.
-        ndim (int): Number of dimensions to project onto.
+        ndim (int): New dimensionality of the transformed X.
 
     Returns:
-        numpy.ndarray: Weights matrix W of shape (d, ndim) where ndim is the
-        new dimensionality of the transformed X.
+        numpy.ndarray: Transformed version of X with shape (n, ndim).
     """
-    # Compute the SVD of the data matrix
-    U, S, Vt = np.linalg.svd(X, full_matrices=False)
+    # Compute the mean of X
+    X_mean = X - np.mean(X, axis=0)
 
-    # Transposed (for shape(d, ndim)) top "ndim" rows of Vt
-    return Vt[:ndim].T
+    # Compute the SVD of the data matrix
+    U, S, Vt = np.linalg.svd(X_mean, full_matrices=False)
+
+    # Select the top ndim components from Vt
+    W = Vt[:ndim].T
+
+    # Transform the data to the new dimensionality
+    T = np.matmul(X_mean, W)
+
+    return T
