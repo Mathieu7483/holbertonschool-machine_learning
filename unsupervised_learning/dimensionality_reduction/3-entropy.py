@@ -24,6 +24,6 @@ def HP(Di, beta):
     Pi /= sum_Pi
 
     # Calculate the Shannon entropy
-    H = -np.sum(Pi * np.log(Pi))
+    H = -np.sum(Pi * np.log2(Pi))
 
     return H, Pi
