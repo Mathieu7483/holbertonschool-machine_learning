@@ -20,13 +20,16 @@ def grads(Y, P):
         Q (numpy.ndarray): Array of shape (n, n)
         containing the Q affinities of Y.
     """
-    # Compute the Q affinities using the Q_affinities function
+    # Compute the Q affinities
     Q, num = Q_affinities(Y)
 
-    # Compute the difference between P and Q
+    # Compute the gradients
     PQ_diff = P - Q
-
-    # Compute the gradients dY
-    dY = np.dot(PQ_diff, Y)
+    dY = np.zeros_like(Y)
+    for i in range(Y.shape[0]):
+        dY[i] = np.sum(
+            (PQ_diff[:, i, np.newaxis] * num[:, i, np.newaxis]) *
+            (Y[i] - Y), axis=0
+        )
 
     return dY, Q
