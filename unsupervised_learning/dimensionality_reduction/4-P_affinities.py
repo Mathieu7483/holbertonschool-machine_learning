@@ -28,7 +28,7 @@ def P_affinities(X, tol=1e-5, perplexity=30.0):
         # Initialize boundaries for binary search
         betamin = None
         betamax = None
-        
+
         # First calculation of entropy and conditional affinities
         Hi, Pi = HP(Di, betas[i])
         Hdiff = Hi - H
@@ -37,14 +37,14 @@ def P_affinities(X, tol=1e-5, perplexity=30.0):
         # Binary search to find the optimal beta_i for the target perplexity
         while abs(Hdiff) > tol and tries < 50:
             if Hdiff > 0:
-                # Entropy is too high -> beta needs to increase (adjust lower bound)
+                # Entropy is too high -> beta needs to increase
                 betamin = betas[i]
                 if betamax is None:
                     betas[i] *= 2.0
                 else:
                     betas[i] = (betas[i] + betamax) / 2.0
             else:
-                # Entropy is too low -> beta needs to decrease (adjust upper bound)
+                # Entropy is too low -> beta needs to decrease
                 betamax = betas[i]
                 if betamin is None:
                     betas[i] /= 2.0
