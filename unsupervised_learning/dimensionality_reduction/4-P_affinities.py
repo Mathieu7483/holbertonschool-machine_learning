@@ -29,8 +29,11 @@ def P_affinities(X, tol=1e-5, perplexity=30.0):
         betamin = None
         betamax = None
 
+        # Extract beta as a scalar float to avoid NumPy reference bugs
+        beta = betas[i, 0]
+
         # First calculation of entropy and conditional affinities
-        Hi, Pi = HP(Di, betas[i])
+        Hi, Pi = HP(Di, beta)
         Hdiff = Hi - H
         tries = 0
 
@@ -38,24 +41,26 @@ def P_affinities(X, tol=1e-5, perplexity=30.0):
         while abs(Hdiff) > tol and tries < 50:
             if Hdiff > 0:
                 # Entropy is too high -> beta needs to increase
-                betamin = betas[i]
+                betamin = beta
                 if betamax is None:
-                    betas[i] *= 2.0
+                    beta *= 2.0
                 else:
-                    betas[i] = (betas[i] + betamax) / 2.0
+                    beta = (beta + betamax) / 2.0
             else:
                 # Entropy is too low -> beta needs to decrease
-                betamax = betas[i]
+                betamax = beta
                 if betamin is None:
-                    betas[i] /= 2.0
+                    beta /= 2.0
                 else:
-                    betas[i] = (betas[i] + betamin) / 2.0
+                    beta = (beta + betamin) / 2.0
 
-            # Recalculate with the new beta_i value
-            Hi, Pi = HP(Di, betas[i])
+            # Recalculate with the new beta value
+            Hi, Pi = HP(Di, beta)
             Hdiff = Hi - H
             tries += 1
 
+        # Save the final optimal beta back into the betas array
+        betas[i, 0] = beta
         # Insert calculated conditional affinities, leaving the diagonal at 0
         P[i, idx] = Pi
 
