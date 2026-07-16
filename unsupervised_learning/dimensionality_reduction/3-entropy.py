@@ -16,14 +16,17 @@ def HP(Di, beta):
         H (float): Shannon entropy of the P affinities.
         Pi (numpy.ndarray): P affinities of shape (n-1,).
     """
-    # Compute the P affinities using the Gaussian kernel
-    Pi = np.exp(-Di * beta)
-    sum_Pi = np.sum(Pi)
+    # Calculate numerator of probabilities
+    num = np.exp(-Di * beta)
+    sum_num = np.sum(num)
 
-    # Normalize the P affinities
-    Pi /= sum_Pi
+    # Avoid division by zero if sum_num is extremely small
+    if sum_num == 0:
+        Pi = np.zeros_like(Di)
+    else:
+        Pi = num / sum_num
 
-    # Calculate the Shannon entropy
+    # Calculate Shannon entropy using base 2 logarithm, avoiding log2(0)
     H = -np.sum(Pi[Pi > 0] * np.log2(Pi[Pi > 0]))
 
     return H, Pi
