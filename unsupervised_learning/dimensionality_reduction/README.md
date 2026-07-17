@@ -1,5 +1,5 @@
 <p align="center"\>
-<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/unsupervised_learning/a-realistic--cinematic-photograph-of-a-machine-lea.png"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/unsupervised_learning/dimensionality_reduction/a-realistic--cinematic-photograph-of-a-machine-lea.png"\>
 </p>
 
 
