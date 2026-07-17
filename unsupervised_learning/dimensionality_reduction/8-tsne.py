@@ -23,7 +23,7 @@ def tsne(X, ndims=2, idims=50, perplexity=30.0, iterations=1000, lr=500):
         Y (numpy.ndarray): Dataset of shape (n, ndims)
         containing the low dimensional transformation of X.
     """
-   # Step 1: Reduce the dimensions using PCA
+    # Step 1: Reduce the dimensions using PCA
     X_reduced = pca(X, idims)
 
     # Step 2: Compute P affinities
