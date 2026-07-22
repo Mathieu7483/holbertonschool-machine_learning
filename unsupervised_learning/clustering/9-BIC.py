@@ -60,4 +60,22 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     b = []
     likelihoods = []
-    return likelihoods, b
+
+    # With each cluster size from kmin to kmax
+    for k in range(kmin, kmax + 1):
+        # Find the best fit with the GMM and current cluster size k
+        pi, m, S, g, li = expectation_maximization(
+            X, k, iterations, tol, verbose)
+
+        if pi is None or m is None or S is None or g is None:
+            return None, None, None, None
+        # NOTE p is the number of parameters, so k * d with the means,
+        # k * d * (d + 1) with the covariance matrix, and k - 1 with the priors
+        p = (k * d) + (k * d * (d + 1) // 2) + (k - 1)
+        bic = p * np.log(n) - 2 * li
+
+        # Save log likelihood and BIC value with current cluster size
+        likelihoods.append(li)
+        b.append(bic)
+
+      return likelihoods, b
