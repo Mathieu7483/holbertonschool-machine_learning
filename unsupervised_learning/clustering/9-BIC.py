@@ -39,27 +39,34 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     Returns `(None, None, None, None)` on failure.
     """
-    if (
-        not isinstance(X, np.ndarray) or X.ndim != 2
-        or not isinstance(kmin, int) or kmin <= 0
-        or kmax is not None and (not isinstance(kmax, int) or kmax < kmin)
-        or not isinstance(iterations, int) or iterations <= 0
-        or isinstance(kmax, int) and kmax <= kmin
-        or not isinstance(iterations, int) or iterations <= 0
-        or not isinstance(tol, float) or tol < 0
-        or not isinstance(verbose, bool)
-    ):
+    if not isinstance(X, np.ndarray) or X.ndim != 2:
+        return None, None, None, None
+    if not isinstance(kmin, int) or kmin <= 0:
+        return None, None, None, None
+    if not isinstance(iterations, int) or iterations <= 0:
+        return None, None, None, None
+    if not isinstance(tol, float) or tol < 0:
+        return None, None, None, None
+    if not isinstance(verbose, bool):
         return None, None, None, None
 
     n, d = X.shape
+
+    if kmin > n:
+        return None, None, None, None
+
     if kmax is None:
         # Undefined, set to maximum possible
         kmax = n
-    if not isinstance(kmax, int) or kmax < 1 or kmax < kmin or kmax > n:
+
+    if not isinstance(kmax, int) or kmax < kmin or kmax > n:
         return None, None, None, None
 
     b = []
     likelihoods = []
+    best_bic = float('inf')
+    best_k = None
+    best_results = None
 
     # With each cluster size from kmin to kmax
     for k in range(kmin, kmax + 1):
@@ -79,8 +86,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         b.append(bic)
 
         # Compare current BIC to best observed BIC
-        if k == kmin or bic < best_bic:
-            # Update the return values
+        if bic < best_bic:
             best_bic = bic
             best_results = (pi, m, S)
             best_k = k
