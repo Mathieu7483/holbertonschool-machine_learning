@@ -34,16 +34,10 @@ def expectation(X, pi, m, S):
     if not np.isclose([np.sum(pi)], [1])[0]:
         return None, None
 
-    n = X.shape[0]
     k = pi.shape[0]
 
-    # Build array of PDF values w/ each cluster, checking for failures
-    pdfs = np.zeros((k, n))
-    for i in range(k):
-        P = pdf(X, m[i], S[i])
-        if P is None:
-            return None, None
-        pdfs[i] = P
+    # Build array of PDF values w/ each cluster
+    pdfs = np.array([pdf(X, m[i], S[i]) for i in range(k)])
 
     # Calculate the weighted PDFs
     weighted_pdfs = pi[:, np.newaxis] * pdfs
@@ -54,3 +48,5 @@ def expectation(X, pi, m, S):
 
     # Calc. the log likelihood(sum of logs of all marginal probs)
     log_likelihood = np.sum(np.log(marginal_prob))
+
+    return post_probs, log_likelihood
