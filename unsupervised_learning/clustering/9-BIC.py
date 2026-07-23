@@ -26,7 +26,6 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     Returns (None, None, None, None) on failure.
     """
-    # 1. Type and value validation for standard arguments
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
     if not isinstance(kmin, int) or kmin <= 0:
@@ -40,15 +39,12 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     n, d = X.shape
 
-    # 2. Validation: kmin cannot be greater than total data points n
     if kmin > n:
         return None, None, None, None
 
-    # 3. Handle default kmax value
     if kmax is None:
         kmax = n
 
-    # 4. Validate kmax type and boundaries
     if not isinstance(kmax, int) or kmax < kmin or kmax > n:
         return None, None, None, None
 
@@ -58,29 +54,19 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     best_k = None
     best_results = None
 
-    # 5. Iterate through each cluster size from kmin to kmax
     for k in range(kmin, kmax + 1):
-        # Perform EM algorithm for current k
         pi, m, S, g, li = expectation_maximization(
             X, k, iterations, tol, verbose)
 
-        # Check for algorithm failure or invalid outputs
         if pi is None or m is None or S is None or g is None or li is None:
             return None, None, None, None
 
-        # Number of parameters p for a full covariance GMM:
-        # - (k - 1) for independent priors
-        # - (k * d) for cluster means
-        # - (k * d * (d + 1) / 2) for full symmetric covariance matrices
         p = (k - 1) + (k * d) + (k * d * (d + 1) // 2)
-
-        # Compute Bayesian Information Criterion: p * ln(n) - 2 * L
         bic = p * np.log(n) - 2 * li
 
         likelihoods.append(li)
         b.append(bic)
 
-        # Update best configuration if current BIC is lower (lower is better)
         if bic < best_bic:
             best_bic = bic
             best_results = (pi, m, S)
