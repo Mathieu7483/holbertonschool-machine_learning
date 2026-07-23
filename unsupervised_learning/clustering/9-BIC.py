@@ -33,7 +33,6 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     if type(verbose) is not bool:
         return None, None, None, None
 
-    
     b = []
     likelihoods = []
     best_bic = float('inf')
