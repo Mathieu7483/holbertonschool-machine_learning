@@ -9,30 +9,26 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     Finds the best number of clusters for a Gaussian Mixture Model using the
     Bayesian Information Criterion (BIC).
     """
-    # 1. Validation de X
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
-
-    n, d = X.shape
-
-    # 2. Validation de kmin
-    if not isinstance(kmin, int) or kmin <= 0 or kmin > n:
+    if not isinstance(kmin, int) or kmin <= 0:
         return None, None, None, None
-
-    # 3. Si kmax est None, on le fixe à n
-    if kmax is None:
-        kmax = n
-
-    # 4. Validation de kmax (kmax doit être un int, >= kmin et <= n)
-    if not isinstance(kmax, int) or kmax < kmin or kmax > n:
-        return None, None, None, None
-
-    # 5. Validation des paramètres optionnels
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None, None, None
     if not isinstance(tol, float) or tol < 0:
         return None, None, None, None
     if not isinstance(verbose, bool):
+        return None, None, None, None
+
+    n, d = X.shape
+
+    if kmax is None:
+        kmax = n
+
+    if not isinstance(kmax, int) or kmax < kmin or kmax > n:
+        return None, None, None, None
+
+    if kmin > kmax:
         return None, None, None, None
 
     b = []
@@ -48,8 +44,8 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         if pi is None or m is None or S is None or g is None or li is None:
             return None, None, None, None
 
-        # p = (k - 1) + (k * d) + (k * d * (d + 1) // 2)
-        p = (k - 1) + (k * d) + (k * d * (d + 1) // 2)
+        # p: number of parameters
+        p = (k * d) + (k * d * (d + 1) // 2) + (k - 1)
         bic = p * np.log(n) - 2 * li
 
         likelihoods.append(li)
