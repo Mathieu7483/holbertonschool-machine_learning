@@ -34,8 +34,8 @@ def pdf(X, m, S):
 
     # Determinant and inverse of the covariance matrix
     det_S = np.linalg.det(S)
-    if det_S == 0:
-        # Determinant is zero, can't invert, stopping here
+    if det_S <= 0:
+        # Determinant is zero or negative, can't invert, stopping here
         return None
 
     inv_S = np.linalg.inv(S)
