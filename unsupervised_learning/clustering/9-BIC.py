@@ -9,28 +9,31 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     Finds the best number of clusters for a Gaussian Mixture Model using the
     Bayesian Information Criterion (BIC).
     """
-    if not isinstance(X, np.ndarray) or X.ndim != 2:
-        return None, None, None, None
-    if not isinstance(kmin, int) or kmin <= 0:
-        return None, None, None, None
-    if not isinstance(iterations, int) or iterations <= 0:
-        return None, None, None, None
-    if not isinstance(tol, float) or tol < 0:
-        return None, None, None, None
-    if not isinstance(verbose, bool):
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None
 
     n, d = X.shape
 
+    if type(kmin) is not int or kmin <= 0 or kmin > n:
+        return None, None, None, None
+
     if kmax is None:
         kmax = n
 
-    if not isinstance(kmax, int) or kmax < kmin or kmax > n:
+    if type(kmax) is not int or kmax <= 0 or kmax > n:
         return None, None, None, None
 
     if kmin >= kmax:
         return None, None, None, None
 
+    if type(iterations) is not int or iterations <= 0:
+        return None, None, None, None
+    if not isinstance(tol, (int, float)) or tol < 0 or type(tol) is bool:
+        return None, None, None, None
+    if type(verbose) is not bool:
+        return None, None, None, None
+
+    
     b = []
     likelihoods = []
     best_bic = float('inf')
