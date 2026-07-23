@@ -10,35 +10,23 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     Bayesian Information Criterion (BIC).
 
     Parameters:
-    - X (numpy.ndarray): The dataset to be analyzed, of shape (n, d) where n
-    is the number of data points and d is the number of dimensions.
-    - kmin (int, optional): The minimum number of clusters to check
-    (inclusive). Default is 1.
-    - kmax (int, optional): The maximum number of clusters to check
-    (inclusive). If None, it is set to the maximum number of clusters possible.
-    - iterations (int, optional): The maximum number of iterations for the
-    Expectation-Maximization (EM) algorithm. Default is 1000.
-    - tol (float, optional): The tolerance for convergence of the EM algorithm.
-    Default is 1e-5.
-    - verbose (bool, optional): If True, prints log likelihood information
-    during the EM algorithm execution. Default is False.
+    - X (numpy.ndarray): The dataset to be analyzed, of shape (n, d).
+    - kmin (int, optional): Minimum number of clusters to check. Default is 1.
+    - kmax (int, optional): Maximum number of clusters to check. If None,
+      it defaults to n (total number of data points).
+    - iterations (int, optional): Maximum EM iterations. Default is 1000.
+    - tol (float, optional): Tolerance for convergence. Default is 1e-5.
+    - verbose (bool, optional): If True, prints log likelihood info.
 
     Returns:
-    - best_k (int): The optimal number of clusters based on BIC.
-    - best_result (tuple): A tuple containing:
-        - pi (numpy.ndarray): The priors for each cluster for the best number
-        of clusters, of shape (k,).
-        - m (numpy.ndarray): The centroid means for each cluster for the best
-        number of clusters, of shape (k, d).
-        - S (numpy.ndarray): The covariance matrices for each cluster for the
-        best number of clusters, of shape (k, d, d).
-    - likelihoods (numpy.ndarray): The log likelihoods for each cluster size
-    tested, of shape (kmax - kmin + 1).
-    - b (numpy.ndarray): The BIC values for each cluster size tested, of
-    shape (kmax - kmin + 1).
+    - best_k (int): Optimal number of clusters based on BIC.
+    - best_result (tuple): (pi, m, S) for the best cluster configuration.
+    - likelihoods (numpy.ndarray): Log likelihoods for each k tested.
+    - b (numpy.ndarray): BIC values for each k tested.
 
-    Returns `(None, None, None, None)` on failure.
+    Returns (None, None, None, None) on failure.
     """
+    # 1. Type and value validation for standard arguments
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
     if not isinstance(kmin, int) or kmin <= 0:
@@ -52,13 +40,15 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     n, d = X.shape
 
+    # 2. Validation: kmin cannot be greater than total data points n
     if kmin > n:
         return None, None, None, None
 
+    # 3. Handle default kmax value
     if kmax is None:
-        # Undefined, set to maximum possible
         kmax = n
 
+    # 4. Validate kmax type and boundaries
     if not isinstance(kmax, int) or kmax < kmin or kmax > n:
         return None, None, None, None
 
@@ -68,29 +58,32 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     best_k = None
     best_results = None
 
-    # With each cluster size from kmin to kmax
+    # 5. Iterate through each cluster size from kmin to kmax
     for k in range(kmin, kmax + 1):
-        # Find the best fit with the GMM and current cluster size k
+        # Perform EM algorithm for current k
         pi, m, S, g, li = expectation_maximization(
             X, k, iterations, tol, verbose)
 
-        if pi is None or m is None or S is None or g is None:
+        # Check for algorithm failure or invalid outputs
+        if pi is None or m is None or S is None or g is None or li is None:
             return None, None, None, None
-        # NOTE p is the number of parameters, so k * d with the means,
-        # k * d * (d + 1) with the covariance matrix, and k - 1 with the priors
-        p = (k * d) + (k * d * (d + 1) // 2) + (k - 1)
+
+        # Number of parameters p for a full covariance GMM:
+        # - (k - 1) for independent priors
+        # - (k * d) for cluster means
+        # - (k * d * (d + 1) / 2) for full symmetric covariance matrices
+        p = (k - 1) + (k * d) + (k * d * (d + 1) // 2)
+
+        # Compute Bayesian Information Criterion: p * ln(n) - 2 * L
         bic = p * np.log(n) - 2 * li
 
-        # Save log likelihood and BIC value with current cluster size
         likelihoods.append(li)
         b.append(bic)
 
-        # Compare current BIC to best observed BIC
+        # Update best configuration if current BIC is lower (lower is better)
         if bic < best_bic:
             best_bic = bic
             best_results = (pi, m, S)
             best_k = k
 
-    likelihoods = np.array(likelihoods)
-    b = np.array(b)
-    return best_k, best_results, likelihoods, b
+    return best_k, best_results, np.array(likelihoods), np.array(b)
