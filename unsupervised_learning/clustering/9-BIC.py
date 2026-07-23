@@ -54,7 +54,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     if kmin > n:
         return None, None, None, None
-    
+
     if kmax is None:
         kmax = n
 
@@ -84,7 +84,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         likelihoods.append(li)
         b.append(bic)
 
-      # Compare current BIC to best observed BIC
+        # Compare current BIC to best observed BIC
         if k == kmin or bic < best_bic:
             # Update the return values
             best_bic = bic
