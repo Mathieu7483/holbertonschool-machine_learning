@@ -47,24 +47,32 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     if pi is None or m is None or S is None:
         return None, None, None, None, None
 
-    li = 0
+    g, li = expectation(X, pi, m, S)
+    if g is None:
+        return None, None, None, None, None
+
     for i in range(iterations):
-        g, prev_li = expectation(X, pi, m, S)
-        if g is None:
+        # In verbose mode, print the likelihood every 10 iterations after 0
+        if verbose and i % 10 == 0:
+            print(f"Log Likelihood after {i} iterations: {round(li, 5)}")
+
+        prev_li = li
+
+        # Re-estimate the parameters with the new values
+        pi, m, S = maximization(X, g)
+        if pi is None or m is None or S is None:
             return None, None, None, None, None
 
-        if verbose and i % 10 == 0:
-            print(f"Log Likelihood after {i} iterations: {round(prev_li, 5)}")
-
-        pi, m, S = maximization(X, g)
-
+        # Evaluate new log likelihood
         g, li = expectation(X, pi, m, S)
         if g is None:
             return None, None, None, None, None
 
+        # If the likelihood varied by less than the tolerance value, we stop
         if np.abs(li - prev_li) <= tol:
             break
 
+    # Last verbose message with current likelihood
     if verbose:
         print(f"Log Likelihood after {i + 1} iterations: {round(li, 5)}")
     return pi, m, S, g, li
