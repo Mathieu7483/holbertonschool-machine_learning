@@ -4,7 +4,6 @@ Module to perform Bayesian Optimization on a Deep Learning model
 using GPyOpt.
 """
 import GPyOpt
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Dropout

@@ -1,0 +1,7 @@
+Best Hyperparameters:
+Learning Rate: 0.1
+Units: 16
+Dropout: 0.22513261393770528
+L2: 0.01
+Batch Size: 64
+Best Metric: 0.09270589053630829
