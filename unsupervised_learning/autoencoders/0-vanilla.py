@@ -7,7 +7,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     """Creates an autoencoder
     Args:
         input_dims: integer containing the dimensions of the model input
-        hidden_layers: list containing the number of nodes for each hidden layer
+        hidden_layers: list containing the number of nodes for each hidden
+        layer
             in the encoder, respectively
         latent_dims: integer containing the dimensions of the latent space
     Returns: encoder, decoder, auto
@@ -37,7 +38,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     encoded_output = encoder(auto_input)
     decoded_output = decoder(encoded_output)
     auto = keras.Model(auto_input, decoded_output, name='autoencoder')
-    
+
     auto.compile(optimizer='adam', loss='binary_crossentropy')
 
     return encoder, decoder, auto
