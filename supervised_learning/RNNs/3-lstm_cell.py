@@ -7,55 +7,92 @@ class LSTMCell:
     """Represent an LSTM unit"""
 
     def __init__(self, i, h, o):
-        """Initialize the LSTM cell
-
-        Args:
-            i (int): The dimensionality of the data
-            h (int): The dimensionality of the hidden state
-            o (int): The dimensionality of the outputs
         """
+        Initialize the LSTM unit.
 
-        self.Wf = np.random.normal(size=(i + h, h))
+        :Parameters:
+        - i (int): Dimensionality of the data.
+        - h (int): Dimensionality of the hidden state.
+        - o (int): Dimensionality of the outputs.
+
+        :Public attributes (weights and biases):
+        - Wf and bf are for the forget gate
+        - Wu and bu are for the update gate
+        - Wc and bc are for the intermediate cell state
+        - Wo and bo are for the output gate
+        - Wy and by are for the outputs
+        """
+        # Weigths initialized with a random normal distribution
+        self.Wf = np.random.randn(i + h, h)
+        self.Wu = np.random.randn(i + h, h)
+        self.Wc = np.random.randn(i + h, h)
+        self.Wo = np.random.randn(i + h, h)
+        self.Wy = np.random.randn(h, o)
+
+        # biases are initialized with zeros
         self.bf = np.zeros((1, h))
-        self.Wu = np.random.normal(size=(i + h, h))
         self.bu = np.zeros((1, h))
-        self.Wc = np.random.normal(size=(i + h, h))
         self.bc = np.zeros((1, h))
-        self.Wo = np.random.normal(size=(i + h, o))
-        self.bo = np.zeros((1, o))
+        self.bo = np.zeros((1, h))
+        self.by = np.zeros((1, o))
 
     def forward(self, h_prev, c_prev, x_t):
-        """Perform forward propagation for one time step
-
-        Args:
-            h_prev (numpy.ndarray): The previous hidden state
-            c_prev (numpy.ndarray): The previous cell state
-            x_t (numpy.ndarray): The data input for the cell
-
-        Returns:
-            h_next (numpy.ndarray): The next hidden state
-            c_next (numpy.ndarray): The next cell state
         """
+        Perform forward propagation for one time step.
 
-        # Concatenate h_prev and x_t
-        concat = np.concatenate((h_prev, x_t), axis=1)
+        :Parameters:
+        - h_prev (numpy.ndarray): Previous hidden state of shape (m, h).
+        - c_prev (numpy.ndarray): Previous cell state of shape (m, h).
+        - x_t (numpy.ndarray): Data input for the cell of shape (m, i).
+
+        :Returns:
+        - h_next (numpy.ndarray): Next hidden state.
+        - c_next (numpy.ndarray): Next cell state.
+        - y (numpy.ndarray): softmax-activated output of the cell.
+        """
+        # Concatenate previous hidden state and cell data input
+        concat_h_x = np.concatenate((h_prev, x_t), axis=1)
 
         # Forget gate
-        f_t = self.sigmoid(np.dot(concat, self.Wf) + self.bf)
+        f_t = self.sigmoid(np.dot(concat_h_x, self.Wf) + self.bf)
 
         # Update gate
-        u_t = self.sigmoid(np.dot(concat, self.Wu) + self.bu)
-
-        # Candidate cell state
-        c_hat_t = np.tanh(np.dot(concat, self.Wc) + self.bc)
-
-        # Next cell state
-        c_next = f_t * c_prev + u_t * c_hat_t
+        u_t = self.sigmoid(np.dot(concat_h_x, self.Wu) + self.bu)
 
         # Output gate
-        o_t = self.sigmoid(np.dot(concat, self.Wo) + self.bo)
+        o_t = self.sigmoid(np.dot(concat_h_x, self.Wo) + self.bo)
 
-        # Next hidden state
+        # New cell input activation vector
+        c_act = np.tanh(np.dot(concat_h_x, self.Wc) + self.bc)
+
+        # New cell state
+        c_next = f_t * c_prev + u_t * c_act
+
+        # hidden state
         h_next = o_t * np.tanh(c_next)
 
-        return h_next, c_next
+        # Calculate output using softmax activation function
+        y_linear = np.dot(h_next, self.Wy) + self.by
+        y = self.softmax(y_linear)
+
+        # Return next hidden state, cell state and softmax-activated output
+        return h_next, c_next, y
+
+    @staticmethod
+    def sigmoid(x):
+        """Sigmoid activation function
+
+        Args:
+            x (numpy.ndarray): The input data
+
+        Returns:
+            numpy.ndarray: The output of the sigmoid function
+        """
+        return 1 / (1 + np.exp(-x))
+
+    @staticmethod
+    def softmax(x):
+        """
+        Simple softmax method
+        """
+        return np.exp(x) / np.exp(x).sum(axis=1, keepdims=True)
