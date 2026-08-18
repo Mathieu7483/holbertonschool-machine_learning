@@ -1,10 +1,15 @@
-#!usr/bin/env python3
-"""Create the class LSTMCell that represents an LSTM unit"""
+#!/usr/bin/env python3
+"""
+Long Short-Term Memory unit
+"""
+
 import numpy as np
 
 
 class LSTMCell:
-    """Represent an LSTM unit"""
+    """
+    This class represents the Long Short-Term Memory unit of a RNN
+    """
 
     def __init__(self, i, h, o):
         """
@@ -79,20 +84,15 @@ class LSTMCell:
         return h_next, c_next, y
 
     @staticmethod
-    def sigmoid(x):
-        """Sigmoid activation function
-
-        Args:
-            x (numpy.ndarray): The input data
-
-        Returns:
-            numpy.ndarray: The output of the sigmoid function
-        """
-        return 1 / (1 + np.exp(-x))
-
-    @staticmethod
     def softmax(x):
         """
         Simple softmax method
         """
         return np.exp(x) / np.exp(x).sum(axis=1, keepdims=True)
+
+    @staticmethod
+    def sigmoid(x):
+        """
+        Simple sigmoid method
+        """
+        return 1 / (1 + np.exp(-x))
