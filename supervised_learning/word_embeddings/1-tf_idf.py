@@ -13,7 +13,7 @@ def tf_idf(sentences, vocab=None):
 
     X = vectorizer.fit_transform(sentences)
     E = X.toarray()
-    
+
     if vocab is None:
         F = np.array(vectorizer.get_feature_names_out())
     else:
