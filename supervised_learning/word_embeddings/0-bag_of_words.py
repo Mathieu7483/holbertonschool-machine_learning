@@ -1,38 +1,49 @@
 #!/usr/bin/env python3
-"""Write a function that creates a bag of words embedding matrix"""
+"""
+Bag of Words embedding matrix
+"""
 import re
+import string
 import numpy as np
 
 
 def bag_of_words(sentences, vocab=None):
-    """Creates a bag of words embedding matrix"""
-    cleaned_sentences = []
-    
+    """
+    Creates a Bag of Words embedding matrix from a list of sentences.
+
+    Args:
+        sentences (list of str): List of sentences to analyze.
+        vocab (list of str, optional): A predefined list of vocabulary words
+        to use for the analysis. If None, all unique words from sentences will
+        be used to build the vocabulary. Defaults to None.
+
+    Returns:
+        tuple:
+            E (numpy.ndarray): A 2D array of shape (s, f) containing
+            word frequencies.
+            features (numpy.ndarray): The list of features corresponding
+            to the columns of the E matrix.
+    """
+    processed_sentences = []
+
     for sentence in sentences:
-        clean = ""
-        for char in sentence.lower():
-            if char.isalnum() or char.isspace():
-                clean += char
-            else:
-                clean += " "
-        words = clean.split()
-        cleaned_sentences.append(words)
+        s = sentence.lower()
+        s = re.sub(r"\'s\b", "", s)
+        s = re.sub(f"[{re.escape(string.punctuation)}]", "", s)
+        processed_sentences.append(s.split())
+
 
     if vocab is None:
-        F = set()
-        for words in cleaned_sentences:
-            F.update(words)
-        F = sorted(list(F))
-    else:
-        F = list(vocab)
+        vocab = sorted(set(
+            word for s in processed_sentences for word in s
+        ))
 
-    word_to_idx = {word: idx for idx, word in enumerate(F)}
+    word_to_index = {word: i for i, word in enumerate(vocab)}
+    E = np.zeros((len(sentences), len(vocab)), dtype=int)
 
-    E = np.zeros((len(sentences), len(F)), dtype=int)
+    for i, s in enumerate(processed_sentences):
+        for word in s:
+            if word in word_to_index:
+                E[i, word_to_index[word]] += 1
 
-    for i, words in enumerate(cleaned_sentences):
-        for word in words:
-            if word in word_to_idx:
-                E[i, word_to_idx[word]] += 1
-
-    return E, F
+    return E, np.array(vocab)
