@@ -7,12 +7,15 @@ import numpy as np
 def bag_of_words(sentences, vocab=None):
     """Creates a bag of words embedding matrix"""
     cleaned_sentences = []
-    for s in sentences:
-        s_clean = s.lower()
-        s_clean = s_clean.replace("'", "")
-        for char in ".,?!\":;-":
-            s_clean = s_clean.replace(char, ' ')
-        words = s_clean.split()
+    
+    for sentence in sentences:
+        clean = ""
+        for char in sentence.lower():
+            if char.isalnum() or char.isspace():
+                clean += char
+            else:
+                clean += " "
+        words = clean.split()
         cleaned_sentences.append(words)
 
     if vocab is None:
