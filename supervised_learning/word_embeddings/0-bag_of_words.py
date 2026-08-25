@@ -12,10 +12,10 @@ def bag_of_words(sentences, vocab=None):
         cleaned_sentences.append(words)
 
     if vocab is None:
-        vocab_set = set()
+        F = set()
         for words in cleaned_sentences:
-            vocab_set.update(words)
-        F = sorted(list(vocab_set))
+            F.update(words)
+        F = sorted(list(F))
     else:
         F = list(vocab)
 
