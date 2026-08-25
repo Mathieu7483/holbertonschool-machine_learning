@@ -32,7 +32,6 @@ def bag_of_words(sentences, vocab=None):
         s = re.sub(f"[{re.escape(string.punctuation)}]", "", s)
         processed_sentences.append(s.split())
 
-
     if vocab is None:
         vocab = sorted(set(
             word for s in processed_sentences for word in s
