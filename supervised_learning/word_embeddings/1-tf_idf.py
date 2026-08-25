@@ -38,9 +38,10 @@ def tf_idf(sentences, vocab=None):
     # Document Frequency (DF)
     df = np.sum(tf > 0, axis=0)
 
-    # Inverse Document Frequency (IDF)
+    # Inverse Document Frequency (IDF) avec lissage (+ 1)
     with np.errstate(divide='ignore'):
-        idf = np.log(num_docs / df)
+        # On calcule log(N / df) puis on ajoute 1 (formule lissée)
+        idf = np.log(num_docs / df) + 1.0
         idf[np.isinf(idf) | np.isnan(idf)] = 0.0
 
     # TF-IDF Embedding
