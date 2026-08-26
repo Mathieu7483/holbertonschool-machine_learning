@@ -1,5 +1,7 @@
-#!usr/bin/env python3
-"""creates a word2vec embedding matrix"""
+#!/usr/bin/env python3
+"""
+Creates a word2vec embedding matrix
+"""
 import gensim
 
 
