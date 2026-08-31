@@ -7,42 +7,39 @@ def uni_bleu(references, sentence):
     """Calculates the unigram BLEU score for a sentence
 
     Args:
-        references (list): is a list of reference translations
-        each reference translation is a list of the words
-        in the translation
-        sentence (list): list containing the model proposed sentence
+        references (list): list of reference translations, where each reference
+                           is a list of words.
+        sentence (list): list containing the model proposed sentence.
 
     Returns:
         float: the unigram BLEU score
     """
-    # Count the number of words in the sentence
-    sentence_count = len(sentence)
-    # Count the number of words in the references
-    reference_count = sum(len(ref) for ref in references)
-    # Create a dictionary to store the counts of each word in the references
-    reference_word_counts = {}
-    for ref in references:
-        for word in ref:
-            if word in reference_word_counts:
-                reference_word_counts[word] += 1
-            else:
-                reference_word_counts[word] = 1
-    # Create a dictionary to store the counts of each word in the sentence
+    c = len(sentence)
+    if c == 0:
+        return 0.0
+
+    # 1. Calculate the effective reference length r
+    ref_lens = [len(ref) for ref in references]
+    # find the reference length that is closest to the candidate length c
+    r = min(ref_lens, key=lambda ref_len: (abs(ref_len - c), ref_len))
+
+    # 2. Clipped Precision for unigrammes
     sentence_word_counts = {}
     for word in sentence:
-        if word in sentence_word_counts:
-            sentence_word_counts[word] += 1
-        else:
-            sentence_word_counts[word] = 1
-    # Calculate the number of words in the sentence that are also in the references
-    matching_word_count = 0
-    for word in sentence_word_counts:
-        if word in reference_word_counts:
-            matching_word_count += min(sentence_word_counts[word], reference_word_counts[word])
-    # Calculate the unigram precision
-    precision = matching_word_count / sentence_count if sentence_count > 0 else 0
-    # Calculate the brevity penalty
-    brevity_penalty = 1 if sentence_count > reference_count else np.exp(1 - reference_count / sentence_count) if sentence_count > 0 else 0
-    # Calculate the unigram BLEU score
-    bleu_score = brevity_penalty * precision
-    return bleu_score
+        sentence_word_counts[word] = sentence_word_counts.get(word, 0) + 1
+
+    clipped_count = 0
+    for word, count in sentence_word_counts.items():
+        # find the maximum count of the word in any reference
+        max_ref_count = max([ref.count(word) for ref in references])
+        clipped_count += min(count, max_ref_count)
+
+    precision = clipped_count / c
+
+    # 3. Brevity Penalty (BP)
+    if c > r:
+        bp = 1.0
+    else:
+        bp = np.exp(1 - r / c)
+
+    return bp * precision
