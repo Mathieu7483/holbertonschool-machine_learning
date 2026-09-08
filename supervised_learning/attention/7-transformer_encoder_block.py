@@ -3,7 +3,7 @@
 from tensorflow.keras.layers.Layer to create
 an encoder block for a transformer"""
 import tensorflow as tf
-multihead_attention = __import__('6-multihead_attention').MultiHeadAttention
+MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
 
 
 class EncoderBlock(tf.keras.layers.Layer):
@@ -12,7 +12,7 @@ class EncoderBlock(tf.keras.layers.Layer):
     def __init__(self, dm, h, hidden, drop_rate=0.1):
         """Constructor method."""
         super(EncoderBlock, self).__init__()
-        self.mha = multihead_attention(dm, h)
+        self.mha = MultiHeadAttention(dm, h)
         self.dense_hidden = tf.keras.layers.Dense(hidden,
                                                   activation='relu')
         self.dense_output = tf.keras.layers.Dense(dm)
