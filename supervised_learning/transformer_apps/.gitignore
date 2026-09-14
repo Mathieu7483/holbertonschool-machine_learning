@@ -2,3 +2,5 @@
 venv/
 #ignorer les fichiers pyc
 *.pyc
+#ignorer le dataset
+ted_hrlr_pt_to_en.tar.gz
