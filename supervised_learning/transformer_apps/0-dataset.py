@@ -46,10 +46,10 @@ class Dataset:
         )
 
         tokenizer_pt = tokenizer_pt.train_new_from_iterator(
-            pt_corpus, vocab_size=2**15
+            pt_corpus, vocab_size=2**13
         )
         tokenizer_en = tokenizer_en.train_new_from_iterator(
-            en_corpus, vocab_size=2**15
+            en_corpus, vocab_size=2**13
         )
 
         return tokenizer_pt, tokenizer_en
