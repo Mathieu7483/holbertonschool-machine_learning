@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Creates all masks for training/validation of a transformer model."""
 import tensorflow as tf
 
 
