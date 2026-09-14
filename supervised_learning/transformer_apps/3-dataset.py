@@ -36,6 +36,7 @@ class Dataset:
         self.data_train = self.data_train.map(self.tf_encode)
         self.data_valid = self.data_valid.map(self.tf_encode)
 
+        # 1. Filter data_train
         self.data_train = self.data_train.filter(
             lambda pt, en: tf.logical_and(
                 tf.size(pt) <= max_len,
@@ -43,6 +44,7 @@ class Dataset:
             )
         )
 
+        # 2. Filter data_valid
         self.data_valid = self.data_valid.filter(
             lambda pt, en: tf.logical_and(
                 tf.size(pt) <= max_len,
@@ -50,24 +52,17 @@ class Dataset:
             )
         )
 
+        # 3. Shuffle, batch, and prefetch data_train
         self.data_train = (self.data_train.cache()
-                           .shuffle(self.tokenizer_pt.vocab_size)
+                           .shuffle(20000)
                            .padded_batch(batch_size)
-                           .prefetch(tf.data.AUTOTUNE))
+                           .prefetch(tf.data.experimental.AUTOTUNE))
 
-        self.data_valid = (self.data_valid.cache()
-                           .padded_batch(batch_size)
-                           .prefetch(tf.data.AUTOTUNE))
+        # 4. Batch and prefetch data_valid
+        self.data_valid = self.data_valid.padded_batch(batch_size)
 
     def tokenize_dataset(self, data):
-        """Creates sub-word tokenizers for the dataset.
-        Args:
-            data [tf.data.Dataset]: contains the ted_hrlr_pt_to_en
-                training split, loaded as a tf.data.Dataset.
-        Returns: tokenizer_pt, tokenizer_en
-            tokenizer_pt: Portuguese tokenizer created from the training set.
-            tokenizer_en: English tokenizer created from the training set.
-        """
+        """Creates sub-word tokenizers for the dataset."""
         pt_corpus = (pt.numpy().decode('utf-8') for pt, en in data)
         en_corpus = (en.numpy().decode('utf-8') for pt, en in data)
 
@@ -88,13 +83,7 @@ class Dataset:
         return tokenizer_pt, tokenizer_en
 
     def encode(self, pt, en):
-        """Function that encodes a translation into tokens.
-        pt : tf.Tensor containing the Portuguese sentence
-        en : tf.Tensor containing the corresponding English sentence
-        Returns: pt_tokens, en_tokens
-        pt_tokens is a list containing the Portuguese tokens
-        en_tokens is a list containing the English tokens
-        """
+        """Function that encodes a translation into tokens."""
         pt_sentence = pt.numpy().decode('utf-8')
         en_sentence = en.numpy().decode('utf-8')
 
