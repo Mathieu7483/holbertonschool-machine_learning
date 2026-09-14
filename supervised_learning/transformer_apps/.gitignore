@@ -1,0 +1,4 @@
+#ignorer le venv
+venv/
+#ignorer les fichiers pyc
+*.pyc
