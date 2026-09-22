@@ -18,12 +18,12 @@ def semantic_search(corpus_path, sentence):
     Returns:
         str: Reference text of the most similar document.
     """
-    # Chargement du modèle SentenceTransformer
+    # Loading the model SentenceTransformer
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
     documents = []
 
-    # Tri pour assurer la consistance des index
+    # Reading all text files in the corpus directory
     filenames = sorted(os.listdir(corpus_path))
 
     for filename in filenames:
@@ -38,14 +38,14 @@ def semantic_search(corpus_path, sentence):
     if not documents:
         return None
 
-    # Calcul des embeddings pour la question et tous les documents
+    # Encoding the query and documents into embeddings
     query_embedding = model.encode(sentence, convert_to_tensor=True)
     doc_embeddings = model.encode(documents, convert_to_tensor=True)
 
-    # Calcul de la similarité cosinus via l'utilitaire dédié
+    # Cosine similarity between the query embedding and document embeddings
     cosine_scores = util.cos_sim(query_embedding, doc_embeddings)[0]
 
-    # Récupération de l'index du meilleur document
+    # Index of the document with the highest cosine similarity score
     best_idx = cosine_scores.argmax().item()
 
     return documents[best_idx]
