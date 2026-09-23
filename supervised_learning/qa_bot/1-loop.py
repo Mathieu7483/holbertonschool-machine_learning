@@ -27,6 +27,7 @@ def qa_loop():
         # Simulate an empty answer for now
         print("A:")
 
+
 # Entry point for the script
 if __name__ == "__main__":
     qa_loop()
