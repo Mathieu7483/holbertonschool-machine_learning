@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Write a function that loads the pre-made FrozenLakeEnv
 environment from gymnasium"""
+import gymnasium as gym
 
 
 def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
@@ -17,8 +18,6 @@ def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
     Returns:
         env: The loaded FrozenLakeEnv environment
     """
-    import gymnasium as gym
-
     env = gym.make('FrozenLake-v1', desc=desc, map_name=map_name,
                    is_slippery=is_slippery)
     return env
