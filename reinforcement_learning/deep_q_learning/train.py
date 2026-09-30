@@ -140,8 +140,7 @@ def main():
     saves the final policy network to policy.h5.
     """
     env = CompatibilityWrapper(
-        gym.make('ALE/Breakout-v5', obs_type='grayscale',
-                 render_mode='human'))
+        gym.make('ALE/Breakout-v5', obs_type='grayscale'))
     nb_actions = env.action_space.n
     model = build_model(INPUT_SHAPE, nb_actions)
     dqn = build_agent(model, nb_actions)
