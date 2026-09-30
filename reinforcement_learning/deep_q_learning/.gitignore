@@ -3,3 +3,6 @@ venv/
 
 #ignore pycache
 __pycache__/
+
+#ignore checkpoints
+checkpoint*
