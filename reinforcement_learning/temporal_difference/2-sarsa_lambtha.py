@@ -24,22 +24,30 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
         numpy.ndarray: the updated Q-table
     """
     initial_epsilon = epsilon
-    n_actions = Q.shape[1]
-
-    def epsilon_greedy(state, eps):
-        if np.random.uniform(0, 1) > eps:
-            return np.argmax(Q[state, :])
-        return np.random.randint(0, n_actions)
 
     for episode in range(episodes):
         state = env.reset()[0]
-        action = epsilon_greedy(state, epsilon)
+
+        # Epsilon-greedy action selection for the first action
+        if np.random.uniform(0, 1) > epsilon:
+
+            action = np.argmax(Q[state, :])
+        else:
+            action = np.random.randint(0, Q.shape[1])
+
+        # Init eligibility traces to zero
         eligibility_traces = np.zeros_like(Q)
 
-        for steps in range(max_steps):
-            new_state, reward, terminated, truncated, steps = env.step(action)
-            new_action = epsilon_greedy(new_state, epsilon)
+        for _ in range(max_steps):
+            new_state, reward, terminated, truncated, _ = env.step(action)
 
+            # Epsilon-greedy action selection for the next action
+            if np.random.uniform(0, 1) > epsilon:
+                new_action = np.argmax(Q[new_state, :])
+            else:
+                new_action = np.random.randint(0, Q.shape[1])
+
+            # TD error (no special case for terminal states)
             delta = (reward + gamma * Q[new_state, new_action]
                      - Q[state, action])
 
@@ -53,7 +61,9 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
             if terminated or truncated:
                 break
 
+        # Exploration rate decay
         epsilon = (min_epsilon + (initial_epsilon - min_epsilon) *
+
                    np.exp(-epsilon_decay * episode))
 
     return Q
