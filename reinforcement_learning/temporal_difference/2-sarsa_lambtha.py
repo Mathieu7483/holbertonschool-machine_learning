@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write the function  that performs SARSA(λ)"""
+"""Write the function that performs SARSA(λ)"""
 import numpy as np
 
 
@@ -26,7 +26,6 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
         state = env.reset()[0]
         eligibility_trace = np.zeros_like(Q)
 
-        # Epsilon-greedy action selection
         if np.random.uniform() < epsilon:
             action = env.action_space.sample()
         else:
@@ -34,26 +33,29 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
 
         for step in range(max_steps):
             next_state, reward, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
 
-            # Epsilon-greedy action selection for the next state
             if np.random.uniform() < epsilon:
                 next_action = env.action_space.sample()
             else:
                 next_action = np.argmax(Q[next_state])
 
-            delta = (reward + gamma * Q[next_state][next_action]
-                     - Q[state][action])
+            if done:
+                delta = reward - Q[state][action]
+            else:
+                delta = (reward + gamma * Q[next_state][next_action]
+                         - Q[state][action])
+
             eligibility_trace[state][action] += 1
 
             Q += alpha * delta * eligibility_trace
             eligibility_trace *= gamma * lambtha
 
-            if terminated or truncated:
+            if done:
                 break
 
             state, action = next_state, next_action
 
-        # Decay epsilon after each episode
         epsilon = max(min_epsilon, epsilon * (1 - epsilon_decay))
 
     return Q
