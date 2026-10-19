@@ -36,8 +36,8 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
         action = epsilon_greedy(state, epsilon)
         eligibility_traces = np.zeros_like(Q)
 
-        for _ in range(max_steps):
-            new_state, reward, terminated, truncated, _ = env.step(action)
+        for steps in range(max_steps):
+            new_state, reward, terminated, truncated, steps = env.step(action)
             new_action = epsilon_greedy(new_state, epsilon)
 
             delta = (reward + gamma * Q[new_state, new_action]
