@@ -95,6 +95,6 @@ python3 -c 'print(__import__("0-monte_carlo").monte_carlo.__doc__)'
 
 ---
 
-## Author
+## ✍️ Author
 
-* **Mathieu** — *Machine Learning Student @ Holberton School* — [GitHub Profile](https://github.com/Mathieu7483)
+  * **Mathieu** - *Programming student, specialization Machine Learning* - [👤 My Github profile](https://github.com/Mathieu7483)
