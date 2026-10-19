@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Write a function that performs the Monte Carlo method
 for estimating the value of a state in an environment."""
-import numpy as np
-import gymnasium as gym
 
 
 def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
