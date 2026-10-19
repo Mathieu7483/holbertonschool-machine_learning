@@ -5,57 +5,76 @@ import numpy as np
 
 def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
                   gamma=0.99, epsilon=1, min_epsilon=0.1, epsilon_decay=0.05):
-    """Function that performs SARSA(λ).
+    """
+    Performs the SARSA(λ) algorithm (with eligibility traces) to estimate
+    a Q-table.
 
-    Args:
-        env: The OpenAI Gym environment instance.
-        Q: A numpy.ndarray of shape (s, a) containing the Q-table.
-        lambtha: The eligibility trace factor.
-        episodes: The total number of episodes to train over.
-        max_steps: The maximum number of steps per episode.
-        alpha: The learning rate.
-        gamma: The discount rate.
-        epsilon: The initial threshold for epsilon greedy.
-        min_epsilon: The minimum value that epsilon should decay to.
-        epsilon_decay: The decay rate for updating epsilon between episodes.
+    Parameters:
+        env (gym.Env): The FrozenLake environment instance.
+        Q (numpy.ndarray): The given Q-table.
+        lambtha (float): The eligibility trace factor.
+        episodes (int, optional): The total number of episodes to train over.
+            Default is 5000.
+        max_steps (int, optional): The maximum number of steps per episode.
+            Default is 100.
+        alpha (float, optional): The learning rate. Default is 0.1.
+        gamma (float, optional): The discount rate. Default is 0.99.
+        epsilon (float, optional): The initial threshold for epsilon-greedy.
+            Default is 1.
+        min_epsilon (float, optional): The minimum value for epsilon.
+            Default is 0.1.
+        epsilon_decay (float, optional): The decay rate for epsilon per
+            episode. Default is 0.05.
 
     Returns:
-        Q: The updated Q-table.
+        numpy.ndarray: The updated Q-table after training.
     """
+    initial_epsilon = epsilon
+
     for episode in range(episodes):
         state = env.reset()[0]
-        eligibility_trace = np.zeros_like(Q)
 
-        if np.random.uniform() < epsilon:
-            action = env.action_space.sample()
+        # Epsilon-greedy action selection for the first action
+        if np.random.uniform(0, 1) > epsilon:
+            action = np.argmax(Q[state, :])
         else:
-            action = np.argmax(Q[state])
+            action = np.random.randint(0, Q.shape[1])
 
-        for step in range(max_steps):
-            next_state, reward, terminated, truncated, _ = env.step(action)
+        # Init eligibility traces to zero
+        eligibility_traces = np.zeros_like(Q)
+
+        for steps in range(max_steps):
+            new_state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
 
-            if np.random.uniform() < epsilon:
-                next_action = env.action_space.sample()
+            # Epsilon-greedy action selection for the next action
+            if np.random.uniform(0, 1) > epsilon:
+                new_action = np.argmax(Q[new_state, :])
             else:
-                next_action = np.argmax(Q[next_state])
+                new_action = np.random.randint(0, Q.shape[1])
 
+            # TD Error calculation (handling terminal states)
             if done:
-                delta = reward - Q[state][action]
+                delta = reward - Q[state, action]
             else:
-                delta = (reward + gamma * Q[next_state][next_action]
-                         - Q[state][action])
+                delta = (reward + (gamma * Q[new_state, new_action]) -
+                         Q[state, action])
 
-            eligibility_trace[state][action] += 1
+            # Update eligibility traces
+            eligibility_traces[state, action] += 1
+            eligibility_traces *= lambtha * gamma
 
-            Q += alpha * delta * eligibility_trace
-            eligibility_trace *= gamma * lambtha
+            # Update the Q-table
+            Q += alpha * delta * eligibility_traces
+
+            state = new_state
+            action = new_action
 
             if done:
                 break
 
-            state, action = next_state, next_action
-
-        epsilon = max(min_epsilon, epsilon * (1 - epsilon_decay))
+        # Exploration rate decay
+        epsilon = (min_epsilon + (initial_epsilon - min_epsilon) *
+                   np.exp(-epsilon_decay * episode))
 
     return Q
