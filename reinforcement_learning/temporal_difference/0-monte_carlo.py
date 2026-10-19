@@ -25,27 +25,30 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
         A numpy.ndarray of shape (s,) containing the updated
         value estimate for each state.
     """
-    for _ in range(episodes):
-        state, _ = env.reset()
-        states = []
-        rewards = []
-        done = False
+    for episode in range(episodes):
+        state = env.reset()[0]
+        episode_data = []
 
-        for _ in range(max_steps):
+        for step in range(max_steps):
             action = policy(state)
-            next_state, reward, terminated, truncated, _ = env.step(action)
-            done = terminated or truncated
 
-            states.append(state)
-            rewards.append(reward)
+            next_state, reward, terminated, truncated, _ = env.step(
+                action)
 
-            if done:
+            episode_data.append((state, reward))
+
+            if terminated or truncated:
                 break
+
             state = next_state
 
         G = 0
-        for t in reversed(range(len(states))):
-            G = gamma * G + rewards[t]
-            V[states[t]] += alpha * (G - V[states[t]])
+        episode_data = np.array(episode_data, dtype=int)
+
+        for state, reward in reversed(episode_data):
+            G = reward + gamma * G
+
+            if state not in episode_data[:episode, 0]:
+                V[state] = V[state] + alpha * (G - V[state])
 
     return V
