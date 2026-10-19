@@ -14,17 +14,13 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
         Q (numpy.ndarray): The given Q-table.
         lambtha (float): The eligibility trace factor.
         episodes (int, optional): The total number of episodes to train over.
-            Default is 5000.
         max_steps (int, optional): The maximum number of steps per episode.
-            Default is 100.
         alpha (float, optional): The learning rate. Default is 0.1.
         gamma (float, optional): The discount rate. Default is 0.99.
         epsilon (float, optional): The initial threshold for epsilon-greedy.
-            Default is 1.
         min_epsilon (float, optional): The minimum value for epsilon.
-            Default is 0.1.
-        epsilon_decay (float, optional): The decay rate for epsilon per
-            episode. Default is 0.05.
+        epsilon_decay (float, optional): The decay rate for
+        epsilon per episode.
 
     Returns:
         numpy.ndarray: The updated Q-table after training.
@@ -60,12 +56,14 @@ def sarsa_lambtha(env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1,
                 delta = (reward + (gamma * Q[new_state, new_action]) -
                          Q[state, action])
 
-            # Update eligibility traces
+            # 1. Accumulate trace for current state-action pair
             eligibility_traces[state, action] += 1
-            eligibility_traces *= lambtha * gamma
 
-            # Update the Q-table
+            # 2. Update the Q-table using the current traces
             Q += alpha * delta * eligibility_traces
+
+            # 3. Decay the eligibility traces for the next steps
+            eligibility_traces *= lambtha * gamma
 
             state = new_state
             action = new_action
