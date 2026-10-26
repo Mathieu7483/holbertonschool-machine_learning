@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """Write a function that computes the policy with a weight of a matrix."""
+import numpy as np
 
 
 def policy(matrix, weight):
     """Computes the policy with a weight of a matrix.
 
     Args:
-        matrix (numpy.ndarray): A numpy.ndarray of shape (m, n) containing
-            the input data.
-        weight (numpy.ndarray): A numpy.ndarray of shape (n, k) containing
-            the weights.
+        matrix (numpy.ndarray): A numpy.ndarray of shape (m, n)
+        containing the input matrix.
+        weight (numpy.ndarray): A numpy.ndarray of shape (n, k)
+        containing the weights.
 
     Returns:
         numpy.ndarray: A numpy.ndarray of shape (m, k)
         containing the computed policy.
     """
-    return matrix @ weight
+    return np.dot(matrix, weight)
