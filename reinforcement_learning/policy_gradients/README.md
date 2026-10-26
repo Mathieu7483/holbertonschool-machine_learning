@@ -1,5 +1,5 @@
 <p align="center"\>
-<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/reinforcement_learning/temporal_difference/temporal%20difference%20learning.png"\>
+<img src="https://github.com/Mathieu7483/holbertonschool-machine_learning/blob/main/reinforcement_learning/policy_gradients/Policy%20Gradients.png"\>
 </p>
 
 # Reinforcement Learning — Policy Gradients (REINFORCE)
