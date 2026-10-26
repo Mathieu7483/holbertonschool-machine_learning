@@ -14,6 +14,9 @@ def policy(matrix, weight):
 
     Returns:
         numpy.ndarray: A numpy.ndarray of shape (m, k)
-        containing the computed policy.
+        containing the computed policy (probabilities).
     """
-    return np.dot(matrix, weight)
+    logits = np.dot(matrix, weight)
+
+    exp_scores = np.exp(logits - np.max(logits, axis=-1, keepdims=True))
+    return exp_scores / np.sum(exp_scores, axis=-1, keepdims=True)
