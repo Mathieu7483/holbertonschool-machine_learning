@@ -21,7 +21,7 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
     n_states = env.observation_space.shape[0]
     n_actions = env.action_space.n
 
-    weight = np.random.randn(n_states, n_actions)
+    weight = np.random.rand(n_states, n_actions)
     scores = []
 
     for episode in range(nb_episodes):
