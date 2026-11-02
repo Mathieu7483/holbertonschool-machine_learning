@@ -1,20 +1,11 @@
 #!/usr/bin/env python3
 """Concatenates two DataFrames."""
 import pandas as pd
-index = __import__("10-index").index
+index = __import__('10-index').index
 
 
 def concat(df1, df2):
-    """
-    Concatenates two pd.DataFrame objects.
-
-    df1: coinbase DataFrame
-    df2: bitstamp DataFrame
-
-    Returns: the concatenated pd.DataFrame, with df2 rows (timestamps up to
-    and including 1417411920) placed on top of df1 rows, keyed by
-    'bitstamp' and 'coinbase'.
-    """
+    """Concatenates two pd.DataFrame objects"""
     df1 = index(df1)
     df2 = index(df2)
     df2 = df2[df2.index <= 1417411920]
