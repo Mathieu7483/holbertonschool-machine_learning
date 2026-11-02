@@ -28,5 +28,5 @@ def concat(df1, df2):
     """
     df1 = index(df1)
     df2 = index(df2)
-    df2 = df2.loc[:1417411920]
-    return pd.concat([df2, df1], keys=["bitstamp", "coinbase"])
+    df2 = df2[df2.index <= 1417411920]
+    return pd.concat([df2, df1], keys=['bitstamp', 'coinbase'])
