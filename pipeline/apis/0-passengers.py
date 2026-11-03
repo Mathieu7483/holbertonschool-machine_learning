@@ -23,7 +23,6 @@ def availableShips(passengerCount):
             passengers = ship.get("passengers")
             if passengers and passengers not in ("n/a", "unknown"):
                 try:
-                    # Remove commas from strings like "1,000,000" and convert to int
                     capacity = int(passengers.replace(",", ""))
                     if capacity >= passengerCount:
                         eligible_ships.append(ship.get("name"))
