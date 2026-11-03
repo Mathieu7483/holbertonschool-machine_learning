@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Computes descriptive statistics of a DataFrame"""
-import pandas as pd
 
 
 def analyze(df):
