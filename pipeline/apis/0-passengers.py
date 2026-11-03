@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 Module to query SWAPI and filter starships by passenger capacity.
 """
