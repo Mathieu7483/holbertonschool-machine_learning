@@ -3,3 +3,6 @@ venv/
 
 #ingnorer le fichier libssl
 libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+
+#ignorer le fichier tmp
+tmp_res
