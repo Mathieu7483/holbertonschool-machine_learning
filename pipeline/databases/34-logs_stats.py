@@ -8,18 +8,18 @@ if __name__ == "__main__":
     db = client.logs
     nginx_collection = db.nginx
 
-    # Nombre total de documents
+    # Number of documents in the collection
     total_logs = nginx_collection.count_documents({})
     print(f"{total_logs} logs")
 
-    # Statistiques par méthode HTTP
+    # Methods and their counts
     print("Methods:")
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
     for method in methods:
         count = nginx_collection.count_documents({"method": method})
         print(f"\tmethod {method}: {count}")
 
-    # Nombre de requêtes avec method=GET et path=/status
+    # Number of logs with path /status
     status_count = nginx_collection.count_documents(
         {"method": "GET", "path": "/status"}
     )
