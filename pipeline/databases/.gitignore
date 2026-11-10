@@ -9,3 +9,8 @@ tmp_res
 
 ignorer pycache
 __pycache__
+
+#ignorer les fichiers de log
+*.log
+nginx.bson
+nginx.metadata.json
