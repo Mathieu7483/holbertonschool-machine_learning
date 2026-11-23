@@ -12,4 +12,4 @@ def rotate_image(image):
     Returns:
         tf.Tensor: rotated image
     """
-    return tf.image.rot90(image, k=-1)
+    return tf.image.rot90(image)
