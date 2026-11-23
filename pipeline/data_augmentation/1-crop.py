@@ -13,4 +13,4 @@ def crop_image(image, size):
     Returns:
         tf.Tensor: cropped image
     """
-    return tf.image.resize_with_crop_or_pad(image, size[0], size[1])
+    return tf.image.random_crop(image, size)
